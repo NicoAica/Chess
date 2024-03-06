@@ -68,10 +68,25 @@ protected:
 	TSubclassOf<ATile> TileClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float TileSize; 
+	float TileSize;
+
+	
+
+	/* Material Instance Configuration */
+	// Tile
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceTileGreen;
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceTileWhite;
+
+	// 
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+
+	
+	
 
 };

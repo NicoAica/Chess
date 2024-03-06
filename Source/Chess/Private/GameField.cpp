@@ -2,7 +2,6 @@
 
 
 #include "GameField.h"
-#include "Chess/Public/GameField.h"
  
  // Sets default values
 AGameField::AGameField()
@@ -22,13 +21,13 @@ AGameField::AGameField()
  {
 	
 	// Load Material instances
-
+/*
 	const FString MaterialInstanceGreenTilePath = TEXT("/Game/Materials/MI_GreenTile.MI_GreenTile"); 
 	UMaterialInstance* MaterialInstanceGreen = Cast<UMaterialInstance>(StaticLoadObject(UMaterialInstance::StaticClass(), nullptr, *MaterialInstanceGreenTilePath));
 
 	const FString MaterialInstanceWhiteTilePath = TEXT("/Game/Materials/MI_WhiteTile.MI_WhiteTile"); 
 	UMaterialInstance* MaterialInstanceWhite = Cast<UMaterialInstance>(StaticLoadObject(UMaterialInstance::StaticClass(), nullptr, *MaterialInstanceWhiteTilePath));
-	
+*/	
 	for (int32 x = 0; x < Size; x++)
 	{
 		for (int32 y = 0; y < Size; y++)
@@ -38,13 +37,15 @@ AGameField::AGameField()
 			const float TileScale = TileSize / 100;
 			Obj->SetActorScale3D(FVector(TileScale, TileScale, 0.2));
 			Obj->SetGridPosition(x, y);
+
+			// Color the tile
 			if ((x + y) % 2 == 0)
 			{
-				Obj->StaticMeshComponent->SetMaterial(0, MaterialInstanceGreen);
+				Obj->StaticMeshComponent->SetMaterial(0, MaterialInstanceTileGreen);
 			}
 			else
 			{
-				Obj->StaticMeshComponent->SetMaterial(0, MaterialInstanceWhite);
+				Obj->StaticMeshComponent->SetMaterial(0, MaterialInstanceTileWhite);
 
 			}
 			
