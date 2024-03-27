@@ -57,6 +57,16 @@ inline FVector2D ATile::GetGridPosition()
 	return TileGridPosition;
 }
 
+void ATile::SelectedTileSetColor()
+{
+	StaticMeshComponent->SetMaterial(0, MaterialInstanceTileDarkYellow);
+}
+
+void ATile::PossibleMoveColor()
+{
+	StaticMeshComponent->SetMaterial(0, MaterialInstanceTileLightYellow);
+}
+
 // Called every frame
 /*
 void ATile::Tick(float DeltaTime)

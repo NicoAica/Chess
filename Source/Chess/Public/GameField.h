@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Pedestrian.h"
-#include "Piece.h"
 #include "Tile.h"
 #include "GameFramework/Actor.h" 
 #include "GameField.generated.h"
@@ -29,7 +28,9 @@ public:
 
 	FVector2D GetPosition(const FHitResult& Hit);
 
-	TArray<ATile*>& GetTitleArray();
+	TArray<ATile*>& GetTileArray();
+
+	TMap<FVector2D, ATile*>& GetTileMap();
 
 	FVector GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const;
 
@@ -43,9 +44,16 @@ public:
 	
 	bool AllEqual(const TArray<int32>& Array) const;
 
+	// Use this method to color the tile spawned to default
+	void DefaultTileColor();
+
 	// Propriety assigned in blueprint
 	UPROPERTY(BlueprintAssignable)
 	FOnReset OnResetEvent;
+
+	UPROPERTY(Transient)
+	TMap<FVector2D, ATile*> TileMap;
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -53,9 +61,6 @@ protected:
 
 	UPROPERTY(Transient)
 	TArray<ATile*> TileArray;
-
-	UPROPERTY(Transient)
-	TMap<FVector2D, ATile*> TileMap;
 
 	static const int32 Not_Assigned = -1;
 
@@ -74,7 +79,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float TileSize;
 
-	 
+	
 
 	/* Material Instance Configuration */
 	// Tile

@@ -53,16 +53,17 @@ AGameField::AGameField()
 			const float TileScale = TileSize / 100;
 			Obj->SetActorScale3D(FVector(TileScale, TileScale, 0.2));
 			Obj->SetGridPosition(x, y);
+			Obj->SetTileStatus(-1, Empty);
 
 			// Color the tile
-			if ((x + y) % 2 == 0)
+			/*if ((x + y) % 2 == 0)
 			{
 				Obj->StaticMeshComponent->SetMaterial(0, MaterialInstanceTileGreen);
 			}
 			else
 			{
 				Obj->StaticMeshComponent->SetMaterial(0, MaterialInstanceTileWhite);
-			}
+			}*/
 			
 			TileArray.Add(Obj);
 			TileMap.Add(FVector2D(x, y), Obj);
@@ -72,8 +73,10 @@ AGameField::AGameField()
 			if (x == 1)
 			{
 				APedestrian* Pedestrian = GetWorld()->SpawnActor<APedestrian>(PedestrianClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+				Pedestrian->SetActualTile(Obj);
 				Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstancePedestrianWhite);
 				Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
+				Obj->SetTileStatus(0, Occupied);
 			}
 			
 			if (x == 6)
@@ -81,20 +84,48 @@ AGameField::AGameField()
 				APedestrian* Pedestrian = GetWorld()->SpawnActor<APedestrian>(PedestrianClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
 				Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstancePedestrianBlack);
 				Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
+				Pedestrian->SetActualTile(Obj);
+				Obj->SetTileStatus(1, Occupied);
 			}
 		}
 	}
+	DefaultTileColor();
  }
 
+void AGameField::DefaultTileColor()
+{
+	for (int32 x = 0; x < Size; x++)
+	{
+		for (int32 y = 0; y < Size; y++)
+		{
+			if ((x + y) % 2 == 0)
+			{
+				ATile** Tile = TileMap.Find(FVector2D(x, y));
+				(*Tile)->StaticMeshComponent->SetMaterial(0, MaterialInstanceTileGreen);
+			}
+			else
+			{
+				ATile** Tile = TileMap.Find(FVector2D(x, y));
+				(*Tile)->StaticMeshComponent->SetMaterial(0, MaterialInstanceTileWhite);
+			}
+			
+		}
+	}
+}
 
  FVector2D AGameField::GetPosition(const FHitResult& Hit)
  {
 	return Cast<ATile>(Hit.GetActor())->GetGridPosition(); 
  }
 
- TArray<ATile*>& AGameField::GetTitleArray()
+ TArray<ATile*>& AGameField::GetTileArray()
  {
 	return TileArray;
+ }
+
+ TMap<FVector2D, ATile*>& AGameField::GetTileMap()
+ {
+	return TileMap;
  }
 
  FVector AGameField::GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const

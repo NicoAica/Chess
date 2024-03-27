@@ -3,6 +3,7 @@
 
 #include "HumanPlayer.h"
 
+#include "ChessGameMode.h"
 #include "Tile.h"
 
 // Sets default values
@@ -31,6 +32,36 @@ void AHumanPlayer::BeginPlay()
 	
 }
 
+void AHumanPlayer::MoveActorTo(ATile* FutureTile)
+{
+
+	// Calc future location
+	const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
+	FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
+
+	// Move Actor
+	SelectedPiece->SetActorLocation(FuturePosition);
+
+	// Change Tile Info
+	SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
+	FutureTile->SetTileStatus(0, Occupied);
+	SelectedPiece->SetActualTile(FutureTile);
+
+	// Remove possible move color
+	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
+
+	// Initialize variable for next time
+	SelectedPiece = nullptr;
+	//IsMyTurn = false;
+}
+
+void AHumanPlayer::MoveActorTo(APiece* EvilPiece)
+{
+	ATile* Tmp = EvilPiece->GetActualTile();
+	MoveActorTo(Tmp);
+	EvilPiece->SelfDestroy();
+}
+
 // Called every frame
 void AHumanPlayer::Tick(float DeltaTime)
 {
@@ -52,26 +83,61 @@ void AHumanPlayer::OnTurn()
 
 void AHumanPlayer::OnClick()
 {
-
-	UE_LOG(LogTemp, Error, TEXT("CIAO"));
-
-	
 	FHitResult Hit = FHitResult(ForceInit);
 
-	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor( ECC_Pawn, true, Hit);
+	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECC_Pawn, true, Hit);
 
 	if (Hit.bBlockingHit && IsMyTurn)
 	{
-		if (ATile* CurrTile = Cast<ATile>(Hit.GetActor()))
+		
+		if (APiece* CurrPiece = Cast<APiece>(Hit.GetActor()))
 		{
+			// Check if click is on owner piece
+			if (CurrPiece->GetActualTile()->GetOwner() == 0)
+			{
+				SelectedPiece = CurrPiece;
+				
+				Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
+				CurrPiece->GetActualTile()->SelectedTileSetColor();
+				
+				CurrPiece->CalculatePossibleMoveAndColorTile();
+				
+			}
+			else 
+			{
+				if (SelectedPiece != nullptr)
+				{
+					ATile* FutureTile = CurrPiece->GetActualTile();
+					FVector2D CurrentPosition = FutureTile->GetGridPosition();
+					if (SelectedPiece->CanGoTo(CurrentPosition))
+					{
+						MoveActorTo(CurrPiece);
+					}
+				}
+			}
+		}
+		else if (ATile* CurrTile = Cast<ATile>(Hit.GetActor()))
+		{
+			if (SelectedPiece != nullptr)
+			{
+				if (FVector2D const CurrentPosition = CurrTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
+				{
+					MoveActorTo(CurrTile);
+				}
+			}
+		}
+
+
+
+		/*
+			UE_LOG(LogTemp, Error, TEXT("Pedina"));
 			if (CurrTile->GetTileStatus() != ETileStatus::Empty)
 			{
 				// Check if pawn in tile is a pawn's player
 				// Move Pawn
 				IsMyTurn = false;
 				
-			}
-		}
+			}*/
 	}
 }
 

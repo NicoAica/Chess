@@ -37,7 +37,8 @@ void AChessGameMode::BeginPlay()
 	float CameraPosX = ((120 * (8 + ((8 - 1)) - (8 - 1))) / 2) - (120 / 2);
 	FVector CameraPos(CameraPosX, CameraPosX, 1000.0f);
 	HumanPlayer->SetActorLocationAndRotation(CameraPos, FRotationMatrix::MakeFromX(FVector(0, 0, -1)).Rotator());
-
+	//HumanPlayer->SetGameField(GField);
+	
 	// Human player = 0
 	Players.Add(HumanPlayer);
 	// Random Player
@@ -94,6 +95,6 @@ void AChessGameMode::ChoosePlayerAndStartGame()
 		Players[i]->PlayerNumber = i;
 	}
 	MoveCounter += 1;
-	UE_LOG(LogTemp, Error, TEXT("Player test"));
+	//UE_LOG(LogTemp, Error, TEXT("Player test"));
 	Players[CurrentPlayer]->OnTurn();
 }

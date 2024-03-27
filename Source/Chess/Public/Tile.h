@@ -34,6 +34,18 @@ public:
 	UPROPERTY(EditAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
 
+	// Color the tile where there is on the piece
+	void SelectedTileSetColor();
+
+	// Color the tile where the piece selected can go
+	void PossibleMoveColor();
+
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceTileDarkYellow;
+
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceTileLightYellow;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

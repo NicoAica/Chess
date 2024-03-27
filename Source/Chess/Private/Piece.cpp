@@ -41,3 +41,13 @@ void APiece::SelfDestroy()
 	Destroy();
 }
 
+void APiece::SetActualTile(ATile* Tile)
+{
+	ActualTile = Tile;
+}
+
+ATile* APiece::GetActualTile()
+{
+	return ActualTile;
+}
+
