@@ -52,17 +52,37 @@ void AChessGameMode::BeginPlay()
 	this->ChoosePlayerAndStartGame();
 }
 
-void AChessGameMode::SetCellSign(const int32 PlayerNumber, const FVector& SpawnPosition)
+void AChessGameMode::SetCellPawn(const int32 PlayerNumber, const FVector& SpawnPosition)
 {
+	if (IsGameOver)
+	{
+		return;
+	}
+
+	// Destination cell
+
+
+	// Is win position
+
+	// else next player 
+	
 }
 
 int32 AChessGameMode::GetNextPlayer(int32 Player)
 {
-		return 0;
+	Player++;
+	if (!Players.IsValidIndex(Player))
+	{
+		Player = 0;
+	}
+	return Player;
 }
 
 void AChessGameMode::TurnNextPlayer()
 {
+	MoveCounter += 1;
+	CurrentPlayer = GetNextPlayer(CurrentPlayer);
+	Players[CurrentPlayer]->OnTurn();
 }
 
 void AChessGameMode::ChoosePlayerAndStartGame()
@@ -74,5 +94,6 @@ void AChessGameMode::ChoosePlayerAndStartGame()
 		Players[i]->PlayerNumber = i;
 	}
 	MoveCounter += 1;
+	UE_LOG(LogTemp, Error, TEXT("Player test"));
 	Players[CurrentPlayer]->OnTurn();
 }

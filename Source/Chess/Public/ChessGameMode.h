@@ -43,7 +43,7 @@ public:
 	virtual void BeginPlay() override;
 
 	// set the cell sign and the position 
-	void SetCellSign(const int32 PlayerNumber, const FVector& SpawnPosition);
+	void SetCellPawn(const int32 PlayerNumber, const FVector& SpawnPosition);
 
 	// get the next player index
 	int32 GetNextPlayer(int32 Player);

@@ -23,7 +23,7 @@ public:
 	// Sets default values for this actor's properties
 	ATile();
 
-	void SetTitleStatus(const int32 TileOwner, const ETileStatus TileStatus);
+	void SetTileStatus(const int32 TileOwner, const ETileStatus TileStatus);
 	
 	ETileStatus GetTileStatus();
 	int32 GetOwner();

@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Pedestrian.h"
+#include "Piece.h"
 #include "Tile.h"
 #include "GameFramework/Actor.h" 
 #include "GameField.generated.h"
@@ -40,7 +42,10 @@ public:
 	TArray<int32> GetLine(const FVector2D Begin, const FVector2D End);
 	
 	bool AllEqual(const TArray<int32>& Array) const;
-	
+
+	// Propriety assigned in blueprint
+	UPROPERTY(BlueprintAssignable)
+	FOnReset OnResetEvent;
 
 protected:
 	// Called when the game starts or when spawned
@@ -54,10 +59,6 @@ protected:
 
 	static const int32 Not_Assigned = -1;
 
-	// Propriety assigned in bluepri nt
-	//UPROPERTY(BlueprintAssignable)
-	//FOnReset OnResetEvent;
-
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	const int32 Size = 8;
 
@@ -67,10 +68,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATile> TileClass;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<APedestrian> PedestrianClass;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float TileSize;
 
-	
+	 
 
 	/* Material Instance Configuration */
 	// Tile
@@ -79,7 +83,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
 	UMaterialInstance *MaterialInstanceTileWhite;
 
-	// 
+	// Piece
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstancePedestrianWhite;
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstancePedestrianBlack;
 
 public:	
 	// Called every frame

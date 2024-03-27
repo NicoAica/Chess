@@ -32,3 +32,8 @@ void ARandomPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
+void ARandomPlayer::OnTurn()
+{
+	IPlayerInterface::OnTurn();
+}
+

@@ -31,7 +31,7 @@ void ATile::BeginPlay()
 	
 }
 
-inline void ATile::SetTitleStatus(const int32 TileOwner, const ETileStatus TileStatus)
+inline void ATile::SetTileStatus(const int32 TileOwner, const ETileStatus TileStatus)
 {
 	PlayerOwner = TileOwner;
 	Status = TileStatus;

@@ -9,7 +9,7 @@ AChessPlayerController::AChessPlayerController()
 {
 	
 	bShowMouseCursor = true;
-	//SetShowMouseCursor(true);
+	SetShowMouseCursor(true);
 
 	bEnableClickEvents = true;
 }

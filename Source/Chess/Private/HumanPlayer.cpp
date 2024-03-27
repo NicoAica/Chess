@@ -52,6 +52,10 @@ void AHumanPlayer::OnTurn()
 
 void AHumanPlayer::OnClick()
 {
+
+	UE_LOG(LogTemp, Error, TEXT("CIAO"));
+
+	
 	FHitResult Hit = FHitResult(ForceInit);
 
 	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor( ECC_Pawn, true, Hit);
@@ -65,6 +69,7 @@ void AHumanPlayer::OnClick()
 				// Check if pawn in tile is a pawn's player
 				// Move Pawn
 				IsMyTurn = false;
+				
 			}
 		}
 	}

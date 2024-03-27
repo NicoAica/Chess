@@ -2,7 +2,11 @@
 
 
 #include "GameField.h"
- 
+
+#include "ChessGameMode.h"
+#include "Pedestrian.h"
+#include "Piece.h"
+
  // Sets default values
 AGameField::AGameField()
 {
@@ -15,11 +19,23 @@ AGameField::AGameField()
 
  void AGameField::ResetField()
  {
+	for (ATile* Obj : TileArray)
+	{
+		Obj->SetTileStatus(Not_Assigned, Empty);
+	}
+
+	 OnResetEvent.Broadcast();
+
+	AChessGameMode* GameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+	GameMode->IsGameOver = false;
+	GameMode->MoveCounter = 0;
+	// respawn all pawns
+	GameMode->ChoosePlayerAndStartGame();
+	
  }
 
  void AGameField::GenerateField()
  {
-	
 	// Load Material instances
 /*
 	const FString MaterialInstanceGreenTilePath = TEXT("/Game/Materials/MI_GreenTile.MI_GreenTile"); 
@@ -46,11 +62,26 @@ AGameField::AGameField()
 			else
 			{
 				Obj->StaticMeshComponent->SetMaterial(0, MaterialInstanceTileWhite);
-
 			}
 			
 			TileArray.Add(Obj);
 			TileMap.Add(FVector2D(x, y), Obj);
+
+			Location.Z = 4.5;
+			
+			if (x == 1)
+			{
+				APedestrian* Pedestrian = GetWorld()->SpawnActor<APedestrian>(PedestrianClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+				Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstancePedestrianWhite);
+				Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
+			}
+			
+			if (x == 6)
+			{
+				APedestrian* Pedestrian = GetWorld()->SpawnActor<APedestrian>(PedestrianClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+				Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstancePedestrianBlack);
+				Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
+			}
 		}
 	}
  }
