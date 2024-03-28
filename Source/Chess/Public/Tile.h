@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ParticleHelper.h"
 #include "GameFramework/Actor.h"
 #include "Tile.generated.h"
+
+class APiece;
 
 UENUM()
 enum ETileStatus : uint8
@@ -46,6 +47,10 @@ public:
 	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
 	UMaterialInstance *MaterialInstanceTileLightYellow;
 
+
+	APiece* GetPiece();
+	void SetPiece(APiece* P);
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -66,4 +71,6 @@ protected:
 	// Called every frame
 	//virtual void Tick(float DeltaTime) override;
 
+    UPROPERTY()
+	APiece* Piece;
 };

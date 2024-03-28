@@ -7,83 +7,77 @@
 // Sets default values
 APedestrian::APedestrian()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
 // Called when the game starts or when spawned
 void APedestrian::BeginPlay()
 {
 	Super::BeginPlay();
-	//GMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
 }
 
-void APedestrian::CalculatePossibleMoveAndColorTile()
+int32 APedestrian::CalculatePossibleMoveAndColorTile()
 {
 	FVector2D Position = ActualTile->GetGridPosition();
 
 	PossibleMove.Empty();
 
 	TMap<FVector2D, ATile*> TileMap = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->GetTileMap();
-	
-	// If is Human Player
-	if (ActualTile->GetOwner() == 0)
+
+	ActualTile->GetOwner() == 0 ? Position.X += 1 : Position.X -= 1;
+
+	if (ATile** Tile = TileMap.Find(Position))
 	{
-		Position.X += 1;
-		
-		if (ATile** Tile = TileMap.Find(Position))
+		if ((*Tile)->GetTileStatus() == Empty)
 		{
-			if ((*Tile)->GetTileStatus() == Empty)
+			(*Tile)->PossibleMoveColor();
+			PossibleMove.Add(Position, *Tile);
+			
+			if ((*Tile)->GetTileStatus() != Occupied && Position.X == (ActualTile->GetOwner() == 0 ? 2 : 5))
 			{
-				(*Tile)->PossibleMoveColor();
-				PossibleMove.Add(Position, *Tile);
-				if ((*Tile)->GetTileStatus() != Occupied && Position.X == 2)
+				ActualTile->GetOwner() == 0 ? Position.X += 1 : Position.X -= 1;
+				if (ATile** Tile2 = TileMap.Find(Position))
 				{
-					Position.X += 1;
-					if (ATile** Tile2 = TileMap.Find(Position))
+					if ((*Tile2)->GetTileStatus() == Empty)
 					{
-						if ((*Tile2)->GetTileStatus() == Empty)
-						{
-							PossibleMove.Add(Position, *Tile);
-							(*Tile2)->PossibleMoveColor();
-						}
+						PossibleMove.Add(Position, *Tile);
+						(*Tile2)->PossibleMoveColor();
 					}
-					Position.X -= 1;
 				}
+				ActualTile->GetOwner() == 0 ? Position.X -= 1 : Position.X += 1;
 			}
 		}
-
-		Position.Y -= 1;
-		
-		if (ATile** Tile = TileMap.Find(Position))
-		{
-			if ((*Tile)->GetOwner() == 1)
-			{
-				PossibleMove.Add(Position, *Tile);
-				//UE_LOG(LogTemp, Error, TEXT("%s"), *(*Tile)->GetGridPosition().ToString());
-				(*Tile)->PossibleMoveColor();
-			}
-		}
-
-		Position.Y += 2;
-
-		if (ATile** Tile = TileMap.Find(Position))
-		{
-			if ((*Tile)->GetOwner() == 1)
-			{
-				PossibleMove.Add(Position, *Tile);
-				(*Tile)->PossibleMoveColor();
-			}
-		}
-		
 	}
+ 
+	Position.Y -= 1;
+
+	if (ATile** Tile = TileMap.Find(Position))
+	{
+		if ((*Tile)->GetTileStatus() != Empty && (*Tile)->GetOwner() != ActualTile->GetOwner())
+		{
+			PossibleMove.Add(Position, *Tile);
+			//UE_LOG(LogTemp, Error, TEXT("%s"), *(*Tile)->GetGridPosition().ToString());
+			(*Tile)->PossibleMoveColor();
+		}
+	}
+
+	Position.Y += 2;
+
+	if (ATile** Tile = TileMap.Find(Position))
+	{
+		if ((*Tile)->GetTileStatus() != Empty && (*Tile)->GetOwner() != ActualTile->GetOwner())
+		{
+			PossibleMove.Add(Position, *Tile);
+			(*Tile)->PossibleMoveColor();
+		}
+	}
+
+	return PossibleMove.Num();
 }
 
 bool APedestrian::CanGoTo(FVector2D Position)
 {
-	FVector2D ActualPosition = ActualTile->GetGridPosition();
-
 	if (PossibleMove.Find(Position))
 	{
 		return true;
@@ -91,5 +85,12 @@ bool APedestrian::CanGoTo(FVector2D Position)
 	return false;
 }
 
-
-
+ATile* APedestrian::GetRandomAvailableTile()
+{
+	auto It = PossibleMove.CreateIterator();
+	if (!PossibleMove.Num()) return nullptr;
+	int32 const Rand = rand() % PossibleMove.Num();
+	for (int32 i = 0; i < Rand; i++)
+		++It;
+	return It->Value;
+}

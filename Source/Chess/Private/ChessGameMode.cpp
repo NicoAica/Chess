@@ -37,7 +37,6 @@ void AChessGameMode::BeginPlay()
 	float CameraPosX = ((120 * (8 + ((8 - 1)) - (8 - 1))) / 2) - (120 / 2);
 	FVector CameraPos(CameraPosX, CameraPosX, 1000.0f);
 	HumanPlayer->SetActorLocationAndRotation(CameraPos, FRotationMatrix::MakeFromX(FVector(0, 0, -1)).Rotator());
-	//HumanPlayer->SetGameField(GField);
 	
 	// Human player = 0
 	Players.Add(HumanPlayer);
@@ -69,7 +68,7 @@ void AChessGameMode::SetCellPawn(const int32 PlayerNumber, const FVector& SpawnP
 	
 }
 
-int32 AChessGameMode::GetNextPlayer(int32 Player)
+int32 AChessGameMode::GetNextPlayer(int32 Player) const
 {
 	Player++;
 	if (!Players.IsValidIndex(Player))
@@ -95,6 +94,5 @@ void AChessGameMode::ChoosePlayerAndStartGame()
 		Players[i]->PlayerNumber = i;
 	}
 	MoveCounter += 1;
-	//UE_LOG(LogTemp, Error, TEXT("Player test"));
 	Players[CurrentPlayer]->OnTurn();
 }

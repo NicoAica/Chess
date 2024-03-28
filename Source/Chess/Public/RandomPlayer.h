@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PlayerInterface.h"
+#include "Tile.h"
 #include "GameFramework/Pawn.h"
 #include "RandomPlayer.generated.h"
 
@@ -28,5 +29,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void OnTurn() override;
+
+	void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat) const;
 
 };

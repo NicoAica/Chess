@@ -46,7 +46,7 @@ public:
 	void SetCellPawn(const int32 PlayerNumber, const FVector& SpawnPosition);
 
 	// get the next player index
-	int32 GetNextPlayer(int32 Player);
+	int32 GetNextPlayer(int32 Player) const;
 
 	// called at the end of the game turn
 	void TurnNextPlayer();

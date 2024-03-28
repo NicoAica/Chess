@@ -24,6 +24,16 @@ ATile::ATile()
 	
 }
 
+APiece* ATile::GetPiece()
+{
+	return Piece;
+}
+
+void ATile::SetPiece(APiece* P)
+{
+	this->Piece = P;
+}
+
 // Called when the game starts or when spawned
 void ATile::BeginPlay()
 {

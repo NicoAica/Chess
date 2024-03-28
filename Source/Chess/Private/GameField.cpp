@@ -77,6 +77,7 @@ AGameField::AGameField()
 				Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstancePedestrianWhite);
 				Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
 				Obj->SetTileStatus(0, Occupied);
+				Obj->SetPiece(Pedestrian);
 			}
 			
 			if (x == 6)
@@ -86,6 +87,7 @@ AGameField::AGameField()
 				Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
 				Pedestrian->SetActualTile(Obj);
 				Obj->SetTileStatus(1, Occupied);
+				Obj->SetPiece(Pedestrian);
 			}
 		}
 	}
@@ -167,7 +169,40 @@ void AGameField::BeginPlay()
 	GenerateField();
 }
 
-// Called every frame
+ int32 AGameField::GetNumberOfBlackPiece()
+ {
+	int32 Count = 0;
+	for (ATile* Tile :TileArray)
+	{
+		if (Tile->GetOwner() == 1)
+		{
+			Count++;
+		}
+	}
+	return Count;
+ }
+
+ ATile* AGameField::GetTileOfBlackPiece(const int32 N)
+ {
+	int32 Count = 0;
+	ATile* Tmp = nullptr;
+	for (ATile* Tile :TileArray)
+	{
+		if (Tile->GetOwner() == 1)
+		{
+			Tmp = Tile;
+			Count++;
+			if (Count > N)
+			{
+				return Tmp;
+			}
+		}
+	}
+	return Tmp;
+	
+ }
+
+ // Called every frame
 void AGameField::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

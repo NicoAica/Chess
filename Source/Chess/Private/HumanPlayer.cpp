@@ -46,13 +46,15 @@ void AHumanPlayer::MoveActorTo(ATile* FutureTile)
 	SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
 	FutureTile->SetTileStatus(0, Occupied);
 	SelectedPiece->SetActualTile(FutureTile);
+	FutureTile->SetPiece(SelectedPiece);
 
 	// Remove possible move color
 	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
 
 	// Initialize variable for next time
 	SelectedPiece = nullptr;
-	//IsMyTurn = false;
+	IsMyTurn = false;
+	
 }
 
 void AHumanPlayer::MoveActorTo(APiece* EvilPiece)
@@ -78,7 +80,6 @@ void AHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void AHumanPlayer::OnTurn()
 { 
 	IsMyTurn = true;
-	
 }
 
 void AHumanPlayer::OnClick()
@@ -101,17 +102,16 @@ void AHumanPlayer::OnClick()
 				CurrPiece->GetActualTile()->SelectedTileSetColor();
 				
 				CurrPiece->CalculatePossibleMoveAndColorTile();
-				
 			}
 			else 
 			{
 				if (SelectedPiece != nullptr)
 				{
 					ATile* FutureTile = CurrPiece->GetActualTile();
-					FVector2D CurrentPosition = FutureTile->GetGridPosition();
-					if (SelectedPiece->CanGoTo(CurrentPosition))
+					if (FVector2D const CurrentPosition = FutureTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
 					{
 						MoveActorTo(CurrPiece);
+						Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer();
 					}
 				}
 			}
@@ -123,6 +123,7 @@ void AHumanPlayer::OnClick()
 				if (FVector2D const CurrentPosition = CurrTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
 				{
 					MoveActorTo(CurrTile);
+					Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer();
 				}
 			}
 		}

@@ -3,6 +3,8 @@
 
 #include "RandomPlayer.h"
 
+#include "ChessGameMode.h"
+
 // Sets default values
 ARandomPlayer::ARandomPlayer()
 {
@@ -34,6 +36,60 @@ void ARandomPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ARandomPlayer::OnTurn()
 {
-	IPlayerInterface::OnTurn();
+	auto const GMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+	auto const GField = GMode->GField;
+
+	ATile* Tile;
+	
+	do
+	{
+		Tile = GField->GetTileOfBlackPiece(rand() % GField->GetNumberOfBlackPiece());
+	}
+	while (!Tile->GetPiece()->CalculatePossibleMoveAndColorTile());
+
+	Tile->SelectedTileSetColor();
+
+	ATile* FutureTile = Tile->GetPiece()->GetRandomAvailableTile();
+
+	// Come metto il timer alla funzione sotto??
+	FTimerHandle UnusedHandle;
+	
+	GetWorldTimerManager().SetTimer(UnusedHandle, [this, FutureTile, Tile, GMode]()
+	{
+		MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0);
+		GMode->TurnNextPlayer();
+	}, 2.0f, false);
+
+
+	//MoveActorTo(FutureTile, Tile->Piece, FutureTile->GetTileStatus() != Empty);
+	
 }
+
+void ARandomPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool const Eat) const
+{
+	// Calc future location
+	const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
+	FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
+
+	// Move Actor
+	SelectedPiece->SetActorLocation(FuturePosition);
+
+	// Change Tile Info
+	SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
+	FutureTile->SetTileStatus(1, Occupied);
+	SelectedPiece->SetActualTile(FutureTile);
+
+	if (Eat)
+	{
+		FutureTile->GetPiece()->SelfDestroy();
+	}
+
+	FutureTile->SetPiece(SelectedPiece);
+
+	// Remove possible move color
+	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
+	
+}
+
+
 

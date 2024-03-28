@@ -50,8 +50,12 @@ public:
 	ATile* GetActualTile();
 
 	// Use this method to color the tile
-	virtual void CalculatePossibleMoveAndColorTile() {};
+	virtual int32 CalculatePossibleMoveAndColorTile() { return 0; };
 
 	// Use this method to know if is a valid move (not safe move)
 	virtual bool CanGoTo(FVector2D Position) { return false; };
+
+	// Use this method to get random available position
+	virtual ATile* GetRandomAvailableTile() { return nullptr; };
+	
 };

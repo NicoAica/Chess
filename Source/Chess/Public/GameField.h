@@ -53,7 +53,12 @@ public:
 
 	UPROPERTY(Transient)
 	TMap<FVector2D, ATile*> TileMap;
-	
+
+	// Return the number of black pieces
+	int32 GetNumberOfBlackPiece();
+
+	// Return the N-th cell with a black piece.
+	ATile* GetTileOfBlackPiece(int32 N);
 
 protected:
 	// Called when the game starts or when spawned
