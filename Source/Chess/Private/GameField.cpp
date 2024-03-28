@@ -6,6 +6,7 @@
 #include "ChessGameMode.h"
 #include "Pieces/Pedestrian.h"
 #include "Piece.h"
+#include "Pieces/Rook.h"
 
  // Sets default values
 AGameField::AGameField()
@@ -55,6 +56,9 @@ AGameField::AGameField()
 	SpawnPedestrianOnTiles();
 	SpawnQueensOnTile();
 	SpawnKnightsOnTile();
+	SpawnRooksOnTile();
+	SpawnBishopsOnTile();
+	SpawnKingsOnTile();
 	DefaultTileColor();
  }
 
@@ -158,6 +162,124 @@ void AGameField::SpawnPedestrianOnTiles()
 	Obj->SetTileStatus(1, Occupied);
 	Obj->SetPiece(Knight);
 	
+ }
+
+ void AGameField::SpawnRooksOnTile()
+ {
+	const float TileScale = TileSize / 100;
+	
+	// White Rooks
+	FVector Location = GetRelativeLocationByXYPosition(0, 0);
+	Location.Z = 4.5;
+	ATile* Obj = *TileMap.Find(FVector2D(0, 0));
+	ARook* Rook = GetWorld()->SpawnActor<ARook>(RookClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Rook->SetActualTile(Obj);
+	Rook->StaticMeshComponent->SetMaterial(0, MaterialInstanceRookWhite);
+	Rook->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(0, Occupied);
+	Obj->SetPiece(Rook);
+	Location = GetRelativeLocationByXYPosition(0, 7);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(0, 7));
+	Rook = GetWorld()->SpawnActor<ARook>(RookClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Rook->SetActualTile(Obj);
+	Rook->StaticMeshComponent->SetMaterial(0, MaterialInstanceRookWhite);
+	Rook->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(0, Occupied);
+	Obj->SetPiece(Rook);
+
+	// Black Rooks
+	Location = GetRelativeLocationByXYPosition(7, 0);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(7, 0));
+	Rook = GetWorld()->SpawnActor<ARook>(RookClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Rook->SetActualTile(Obj);
+	Rook->StaticMeshComponent->SetMaterial(0, MaterialInstanceRookBlack);
+	Rook->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(1, Occupied);
+	Obj->SetPiece(Rook);
+	Location = GetRelativeLocationByXYPosition(7, 7);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(7, 7));
+	Rook = GetWorld()->SpawnActor<ARook>(RookClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Rook->SetActualTile(Obj);
+	Rook->StaticMeshComponent->SetMaterial(0, MaterialInstanceRookBlack);
+	Rook->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(1, Occupied);
+	Obj->SetPiece(Rook);
+ }
+
+ void AGameField::SpawnBishopsOnTile()
+ {
+	const float TileScale = TileSize / 100;
+	
+	// White Bishops
+	FVector Location = GetRelativeLocationByXYPosition(0, 2);
+	Location.Z = 4.5;
+	ATile* Obj = *TileMap.Find(FVector2D(0, 2));
+	ABishop* Bishop = GetWorld()->SpawnActor<ABishop>(BishopClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Bishop->SetActualTile(Obj);
+	Bishop->StaticMeshComponent->SetMaterial(0, MaterialInstanceBishopWhite);
+	Bishop->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(0, Occupied);
+	Obj->SetPiece(Bishop);
+	Location = GetRelativeLocationByXYPosition(0, 5);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(0, 5));
+	Bishop = GetWorld()->SpawnActor<ABishop>(BishopClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Bishop->SetActualTile(Obj);
+	Bishop->StaticMeshComponent->SetMaterial(0, MaterialInstanceBishopWhite);
+	Bishop->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(0, Occupied);
+	Obj->SetPiece(Bishop);
+
+	// Black Bishops
+	Location = GetRelativeLocationByXYPosition(7, 2);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(7, 2));
+	Bishop = GetWorld()->SpawnActor<ABishop>(BishopClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Bishop->SetActualTile(Obj);
+	Bishop->StaticMeshComponent->SetMaterial(0, MaterialInstanceBishopBlack);
+	Bishop->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(1, Occupied);
+	Obj->SetPiece(Bishop);
+	Location = GetRelativeLocationByXYPosition(7, 5);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(7, 5));
+	Bishop = GetWorld()->SpawnActor<ABishop>(BishopClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Bishop->SetActualTile(Obj);
+	Bishop->StaticMeshComponent->SetMaterial(0, MaterialInstanceBishopBlack);
+	Bishop->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(1, Occupied);
+	Obj->SetPiece(Bishop);
+ }
+
+ void AGameField::SpawnKingsOnTile()
+ {
+	const float TileScale = TileSize / 100;
+	
+	// White King
+	FVector Location = GetRelativeLocationByXYPosition(0, 4);
+	Location.Z = 4.5;
+	ATile* Obj = *TileMap.Find(FVector2D(0, 4));
+	AKing* King = GetWorld()->SpawnActor<AKing>(KingClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	King->SetActualTile(Obj);
+	King->StaticMeshComponent->SetMaterial(0, MaterialInstanceKingWhite);
+	King->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(0, Occupied);
+	Obj->SetPiece(King);
+
+
+	// Black King
+	Location = GetRelativeLocationByXYPosition(7, 4);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(7, 4));
+	King = GetWorld()->SpawnActor<AKing>(KingClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	King->SetActualTile(Obj);
+	King->StaticMeshComponent->SetMaterial(0, MaterialInstanceKingBlack);
+	King->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(1, Occupied);
+	Obj->SetPiece(King);
  }
 
  void AGameField::DefaultTileColor()

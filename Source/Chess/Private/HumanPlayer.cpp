@@ -102,7 +102,10 @@ void AHumanPlayer::OnClick()
 				CurrPiece->GetActualTile()->SelectedTileSetColor();
 				
 				//CurrPiece->CalculatePossibleMoveAndColorTile();
-				CurrPiece->CalculatePossibleMove();
+				int32 Test = CurrPiece->CalculatePossibleMove();
+
+				UE_LOG(LogTemp, Error, TEXT("Pedina %s con valori %d"), *CurrPiece->GetFullName(), Test);
+				
 				CurrPiece->ColorTilePossibleMove();
 			}
 			else 

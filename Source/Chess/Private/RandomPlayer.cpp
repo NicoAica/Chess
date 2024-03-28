@@ -59,7 +59,7 @@ void ARandomPlayer::OnTurn()
 	{
 		MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0);
 		GMode->TurnNextPlayer();
-	}, 2.0f, false);
+	}, 1.0f, false);
 
 
 	//MoveActorTo(FutureTile, Tile->Piece, FutureTile->GetTileStatus() != Empty);

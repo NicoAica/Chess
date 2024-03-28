@@ -6,8 +6,11 @@
 #include "Pieces/Pedestrian.h"
 #include "Tile.h"
 #include "GameFramework/Actor.h" 
+#include "Pieces/Bishop.h"
+#include "Pieces/King.h"
 #include "Pieces/Knight.h"
 #include "Pieces/Queen.h"
+#include "Pieces/Rook.h"
 #include "GameField.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReset);
@@ -63,12 +66,12 @@ public:
 	ATile* GetTileOfBlackPiece(int32 N);
 
 	/* Spawn Pieces */
-	// Use this method to spawn pedestrians
 	void SpawnPedestrianOnTiles();
-	// Use this method to spawn queens
 	void SpawnQueensOnTile();
-	// Use this method to spawn knights
 	void SpawnKnightsOnTile();
+	void SpawnRooksOnTile();
+	void SpawnBishopsOnTile();
+	void SpawnKingsOnTile();
 
 protected:
 	// Called when the game starts or when spawned
@@ -98,6 +101,12 @@ protected:
 	TSubclassOf<AQueen> QueenClass;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AKnight> KnightClass;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ARook> RookClass;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ABishop> BishopClass;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AKing> KingClass;
 
 	/* Material Instance Configuration */
 	// Tile
@@ -124,7 +133,24 @@ protected:
 	UMaterialInstance *MaterialInstanceKnightWhite;
 	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
 	UMaterialInstance *MaterialInstanceKnightBlack;
-	
+
+	// Rook
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceRookWhite;
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceRookBlack;
+
+	// Bishop
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceBishopWhite;
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceBishopBlack;
+
+	// King
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceKingWhite;
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceKingBlack;
 
 public:	
 	// Called every frame
