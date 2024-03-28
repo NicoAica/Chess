@@ -23,11 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	virtual int32 CalculatePossibleMoveAndColorTile() override;
-
-	virtual bool CanGoTo(FVector2D Position) override;
-
-	virtual ATile* GetRandomAvailableTile() override;
-
+	virtual int32 CalculatePossibleMove() override;
+	
 };
 

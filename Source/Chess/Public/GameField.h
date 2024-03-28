@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pedestrian.h"
+#include "Pieces/Pedestrian.h"
 #include "Tile.h"
 #include "GameFramework/Actor.h" 
+#include "Pieces/Knight.h"
+#include "Pieces/Queen.h"
 #include "GameField.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReset);
@@ -60,6 +62,14 @@ public:
 	// Return the N-th cell with a black piece.
 	ATile* GetTileOfBlackPiece(int32 N);
 
+	/* Spawn Pieces */
+	// Use this method to spawn pedestrians
+	void SpawnPedestrianOnTiles();
+	// Use this method to spawn queens
+	void SpawnQueensOnTile();
+	// Use this method to spawn knights
+	void SpawnKnightsOnTile();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -75,16 +85,19 @@ protected:
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	//int32 WinSize;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ATile> TileClass;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<APedestrian> PedestrianClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float TileSize;
 
-	
+	/* BluePrint Classes */
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ATile> TileClass;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<APedestrian> PedestrianClass;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AQueen> QueenClass;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AKnight> KnightClass;
 
 	/* Material Instance Configuration */
 	// Tile
@@ -93,11 +106,25 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
 	UMaterialInstance *MaterialInstanceTileWhite;
 
-	// Piece
+	// Pieces
+	// Pedestrian
 	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
 	UMaterialInstance *MaterialInstancePedestrianWhite;
 	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
 	UMaterialInstance *MaterialInstancePedestrianBlack;
+
+	// Queens
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceQueenWhite;
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceQueenBlack;
+	
+	// Knight
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceKnightWhite;
+	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
+	UMaterialInstance *MaterialInstanceKnightBlack;
+	
 
 public:	
 	// Called every frame

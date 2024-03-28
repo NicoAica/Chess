@@ -16,8 +16,6 @@ class CHESS_API APiece : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APiece();
-
-	
 	
 	UPROPERTY(EditAnywhere, Category="Components")
 	UStaticMeshComponent* StaticMeshComponent;
@@ -47,15 +45,19 @@ public:
 
 	void SetActualTile(ATile* Tile);
 	
-	ATile* GetActualTile();
+	ATile* GetActualTile() const;
+
 
 	// Use this method to color the tile
-	virtual int32 CalculatePossibleMoveAndColorTile() { return 0; };
+	void ColorTilePossibleMove();
+	
+	// Use this method to calculate possible move
+	virtual int32 CalculatePossibleMove() { return 0; }
 
 	// Use this method to know if is a valid move (not safe move)
-	virtual bool CanGoTo(FVector2D Position) { return false; };
+	bool CanGoTo(FVector2D Position);
 
 	// Use this method to get random available position
-	virtual ATile* GetRandomAvailableTile() { return nullptr; };
+	ATile* GetRandomAvailableTile();
 	
 };

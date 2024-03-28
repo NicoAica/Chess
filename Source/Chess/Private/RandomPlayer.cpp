@@ -45,8 +45,9 @@ void ARandomPlayer::OnTurn()
 	{
 		Tile = GField->GetTileOfBlackPiece(rand() % GField->GetNumberOfBlackPiece());
 	}
-	while (!Tile->GetPiece()->CalculatePossibleMoveAndColorTile());
-
+	while (!Tile->GetPiece()->CalculatePossibleMove());
+	
+	Tile->GetPiece()->ColorTilePossibleMove();
 	Tile->SelectedTileSetColor();
 
 	ATile* FutureTile = Tile->GetPiece()->GetRandomAvailableTile();

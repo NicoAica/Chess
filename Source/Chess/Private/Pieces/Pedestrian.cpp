@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Pedestrian.h"
+#include "Pieces/Pedestrian.h"
 #include "ChessGameMode.h"
 
 // Sets default values
@@ -17,7 +17,7 @@ void APedestrian::BeginPlay()
 	Super::BeginPlay();
 }
 
-int32 APedestrian::CalculatePossibleMoveAndColorTile()
+int32 APedestrian::CalculatePossibleMove()
 {
 	FVector2D Position = ActualTile->GetGridPosition();
 
@@ -31,7 +31,6 @@ int32 APedestrian::CalculatePossibleMoveAndColorTile()
 	{
 		if ((*Tile)->GetTileStatus() == Empty)
 		{
-			(*Tile)->PossibleMoveColor();
 			PossibleMove.Add(Position, *Tile);
 			
 			if ((*Tile)->GetTileStatus() != Occupied && Position.X == (ActualTile->GetOwner() == 0 ? 2 : 5))
@@ -41,8 +40,7 @@ int32 APedestrian::CalculatePossibleMoveAndColorTile()
 				{
 					if ((*Tile2)->GetTileStatus() == Empty)
 					{
-						PossibleMove.Add(Position, *Tile);
-						(*Tile2)->PossibleMoveColor();
+						PossibleMove.Add(Position, *Tile2);
 					}
 				}
 				ActualTile->GetOwner() == 0 ? Position.X -= 1 : Position.X += 1;
@@ -58,7 +56,6 @@ int32 APedestrian::CalculatePossibleMoveAndColorTile()
 		{
 			PossibleMove.Add(Position, *Tile);
 			//UE_LOG(LogTemp, Error, TEXT("%s"), *(*Tile)->GetGridPosition().ToString());
-			(*Tile)->PossibleMoveColor();
 		}
 	}
 
@@ -69,28 +66,8 @@ int32 APedestrian::CalculatePossibleMoveAndColorTile()
 		if ((*Tile)->GetTileStatus() != Empty && (*Tile)->GetOwner() != ActualTile->GetOwner())
 		{
 			PossibleMove.Add(Position, *Tile);
-			(*Tile)->PossibleMoveColor();
 		}
 	}
 
 	return PossibleMove.Num();
-}
-
-bool APedestrian::CanGoTo(FVector2D Position)
-{
-	if (PossibleMove.Find(Position))
-	{
-		return true;
-	}
-	return false;
-}
-
-ATile* APedestrian::GetRandomAvailableTile()
-{
-	auto It = PossibleMove.CreateIterator();
-	if (!PossibleMove.Num()) return nullptr;
-	int32 const Rand = rand() % PossibleMove.Num();
-	for (int32 i = 0; i < Rand; i++)
-		++It;
-	return It->Value;
 }

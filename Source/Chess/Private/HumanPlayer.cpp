@@ -101,7 +101,9 @@ void AHumanPlayer::OnClick()
 				Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
 				CurrPiece->GetActualTile()->SelectedTileSetColor();
 				
-				CurrPiece->CalculatePossibleMoveAndColorTile();
+				//CurrPiece->CalculatePossibleMoveAndColorTile();
+				CurrPiece->CalculatePossibleMove();
+				CurrPiece->ColorTilePossibleMove();
 			}
 			else 
 			{
