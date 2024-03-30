@@ -3,7 +3,7 @@
 
 #include "ChessPlayerController.h"
 
-#include "HumanPlayer.h"
+#include "Players/HumanPlayer.h"
 
 AChessPlayerController::AChessPlayerController()
 {

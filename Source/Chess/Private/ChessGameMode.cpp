@@ -3,8 +3,8 @@
 
 #include "ChessGameMode.h"
 #include "EngineUtils.h"
-#include "HumanPlayer.h"
-#include "RandomPlayer.h"
+#include "Players/HumanPlayer.h"
+#include "Players/RandomPlayer.h"
 
 AChessGameMode::AChessGameMode()
 {
@@ -64,9 +64,6 @@ int32 AChessGameMode::GetNextPlayer(int32 Player) const
 
 void AChessGameMode::TurnNextPlayer()
 {
-	//UE_LOG(LogTemp, Error, TEXT("Player %d, do Check: %hhd"), CurrentPlayer, GField->IsCheck(CurrentPlayer));
-	// Se è scacco matto allora termina il gioco
-	
 	const int32 ActualPlayer = CurrentPlayer;
 	
 	MoveCounter += 1;
@@ -74,21 +71,15 @@ void AChessGameMode::TurnNextPlayer()
 
 	if (GField->IsCheck(ActualPlayer))
 	{
-		UE_LOG(LogTemp, Error, TEXT("Scacco"));
 		if (GField->IsCheckMate(CurrentPlayer))
 		{
 			IsGameOver = true;
-			UE_LOG(LogTemp, Error, TEXT("Scacco matto"));
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Check Mate!"));
 			return;
 		}
-		UE_LOG(LogTemp, Error, TEXT("Scacco non matto"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Check!"));
 	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Non scacco - matto"));
-	}
-
-	
+		
 	Players[CurrentPlayer]->OnTurn();
 }
 

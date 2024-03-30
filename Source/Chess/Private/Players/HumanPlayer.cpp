@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HumanPlayer.h"
+#include "Players/HumanPlayer.h"
 
 #include "ChessGameMode.h"
 #include "Tile.h"
@@ -35,23 +35,40 @@ void AHumanPlayer::BeginPlay()
 void AHumanPlayer::MoveActorTo(ATile* FutureTile)
 {
 
-	// Calc future location
-	const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
-	FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
+	/* Promote */
+	if (FutureTile->GetGridPosition().X == 7 && Cast<APedestrian>(SelectedPiece))
+	{
+		
+		// Remove reference
+		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
+		SelectedPiece->GetActualTile()->SetPiece(nullptr);
+		
+		// Spawn queen
+		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, 0);
 
-	// Move Actor
-	SelectedPiece->SetActorLocation(FuturePosition);
+		SelectedPiece->SelfDestroy();
+		
+	}
+	else
+	{
+		// Calc future location
+		const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
+		FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
+		
+		// Move Actor
+		SelectedPiece->SetActorLocation(FuturePosition);
 
-	// Change Tile Info
-	FutureTile->SetTileStatus(0, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
-	SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-	SelectedPiece->GetActualTile()->SetPiece(nullptr);
-	SelectedPiece->SetActualTile(FutureTile);
-	FutureTile->SetPiece(SelectedPiece);
+		// Change Tile Info
+		FutureTile->SetTileStatus(0, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
+		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
+		SelectedPiece->GetActualTile()->SetPiece(nullptr);
+		SelectedPiece->SetActualTile(FutureTile);
+		FutureTile->SetPiece(SelectedPiece);
+	}
 
 	// Remove possible move color
 	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
-
+	
 	// Initialize variable for next time
 	SelectedPiece = nullptr;
 	IsMyTurn = false;
@@ -81,6 +98,7 @@ void AHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void AHumanPlayer::OnTurn()
 { 
 	IsMyTurn = true;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Your Turn"));
 }
 
 void AHumanPlayer::OnClick()
@@ -102,12 +120,7 @@ void AHumanPlayer::OnClick()
 				Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
 				CurrPiece->GetActualTile()->SelectedTileSetColor();
 				
-				//CurrPiece->CalculatePossibleMoveAndColorTile();
 				int32 Test = CurrPiece->CalculatePossibleMove();
-
-				//UE_LOG(LogTemp, Error, TEXT("Pedina %s con valori %d"), *CurrPiece->GetFullName(), Test);
-				//UE_LOG(LogTemp, Error, TEXT("è il re?: %hhd"), CurrPiece->GetActualTile()->B_IsKingTile);
-
 				
 				CurrPiece->ColorTilePossibleMove();
 			}
@@ -135,18 +148,6 @@ void AHumanPlayer::OnClick()
 				}
 			}
 		}
-
-
-
-		/*
-			UE_LOG(LogTemp, Error, TEXT("Pedina"));
-			if (CurrTile->GetTileStatus() != ETileStatus::Empty)
-			{
-				// Check if pawn in tile is a pawn's player
-				// Move Pawn
-				IsMyTurn = false;
-				
-			}*/
 	}
 }
 

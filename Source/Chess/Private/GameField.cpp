@@ -53,12 +53,12 @@ AGameField::AGameField()
 			TileMap.Add(FVector2D(x, y), Obj);
 		}
 	}
-	//SpawnPedestrianOnTiles();
-	SpawnQueensOnTile();
+	SpawnPedestrianOnTiles();
+	//SpawnQueensOnTile();
 	//SpawnKnightsOnTile();
-	SpawnRooksOnTile();
-	SpawnBishopsOnTile();
-	SpawnKingsOnTile();
+	//SpawnRooksOnTile();
+	//SpawnBishopsOnTile();
+	//SpawnKingsOnTile();
 	DefaultTileColor();
  }
 
@@ -67,6 +67,7 @@ void AGameField::SpawnPedestrianOnTiles()
 	const float TileScale = TileSize / 100;
 	for (int i = 0; i < Size; i++)
 	{
+		
 		// White Pedestrian
 		FVector Location = GetRelativeLocationByXYPosition(1, i);
 		Location.Z = 4.5;
@@ -79,9 +80,9 @@ void AGameField::SpawnPedestrianOnTiles()
 		Obj->SetPiece(Pedestrian);
 
 		// Black Pedestrian
-		Location = GetRelativeLocationByXYPosition(6, i);
+		Location = GetRelativeLocationByXYPosition(3, i);
 		Location.Z = 4.5;
-		Obj = *TileMap.Find(FVector2D(6, i));
+		Obj = *TileMap.Find(FVector2D(3, i));
 		Pedestrian = GetWorld()->SpawnActor<APedestrian>(PedestrianClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
 		Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstancePedestrianBlack);
 		Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
@@ -378,6 +379,30 @@ void AGameField::SpawnPedestrianOnTiles()
 		++It;
 	}
 	return Count == 0;
+ }
+
+ void AGameField::Promote(ATile* FuturePosition, int32 const Player)
+ {
+	const float TileScale = TileSize / 100;
+	
+	FVector Location = GetRelativeLocationByXYPosition(FuturePosition->GetGridPosition().X, FuturePosition->GetGridPosition().Y);
+	Location.Z = 4.5;
+	
+	AQueen* Queen = GetWorld()->SpawnActor<AQueen>(QueenClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Queen->SetActualTile(FuturePosition);
+	if (Player)
+	{
+		Queen->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenBlack);
+	}
+	else
+	{
+		Queen->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenWhite);
+	}
+	
+	Queen->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	FuturePosition->SetTileStatus(Player, Occupied, false);
+	FuturePosition->SetPiece(Queen);
+	Queen->CalculatePossibleMove();
  }
 
 

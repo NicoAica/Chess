@@ -46,6 +46,9 @@ public:
 	// Check if Player make a check
 	bool IsCheckMate(const int32 Player);
 
+	// Promote
+	void Promote(ATile* FuturePosition, int32 Player);
+
 	FVector GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const;
 
 	static FVector2D GetXYPositionByRelativeLocation(const FVector& Location);
