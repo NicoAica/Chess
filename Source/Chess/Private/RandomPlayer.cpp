@@ -40,10 +40,16 @@ void ARandomPlayer::OnTurn()
 	auto const GField = GMode->GField;
 
 	ATile* Tile;
+	int32 Test = 0;
 	
 	do
 	{
+		Test++;
 		Tile = GField->GetTileOfBlackPiece(rand() % GField->GetNumberOfBlackPiece());
+		if (Test > 150)
+		{
+			return;
+		}
 	}
 	while (!Tile->GetPiece()->CalculatePossibleMove());
 	

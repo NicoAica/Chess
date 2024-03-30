@@ -92,11 +92,11 @@ void APiece::AddPossibleMove(const FVector2D Position, ATile* Tile, APiece* Piec
 		
 		if (Tile->GetOwner() == 0)
 		{
-			IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DoCheck(1);
+			IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(1);
 		}
 		else
 		{
-			IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DoCheck(0);
+			IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(0);
 		}
 		
 		OldTile->SetTileStatus(Tile->GetOwner(), Occupied, Tile->B_IsKingTile);

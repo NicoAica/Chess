@@ -40,8 +40,11 @@ public:
 	// Return only the tiles that belong to the player
 	TMap<FVector2D, ATile*>& GetYourTile(const int32 Player, TMap<FVector2D, ATile*>& Tmp);
 
+	// Return if the player make check
+	bool IsCheck(const int32 Player);
+
 	// Check if Player make a check
-	bool DoCheck(const int32 Player);
+	bool IsCheckMate(const int32 Player);
 
 	FVector GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const;
 

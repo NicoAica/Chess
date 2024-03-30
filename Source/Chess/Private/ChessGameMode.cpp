@@ -52,22 +52,6 @@ void AChessGameMode::BeginPlay()
 	this->ChoosePlayerAndStartGame();
 }
 
-void AChessGameMode::SetCellPawn(const int32 PlayerNumber, const FVector& SpawnPosition)
-{
-	if (IsGameOver)
-	{
-		return;
-	}
-
-	// Destination cell
-
-
-	// Is win position
-
-	// else next player 
-	
-}
-
 int32 AChessGameMode::GetNextPlayer(int32 Player) const
 {
 	Player++;
@@ -80,9 +64,31 @@ int32 AChessGameMode::GetNextPlayer(int32 Player) const
 
 void AChessGameMode::TurnNextPlayer()
 {
-	UE_LOG(LogTemp, Error, TEXT("Player %d, do Check: %hhd"), CurrentPlayer, GField->DoCheck(CurrentPlayer));
+	//UE_LOG(LogTemp, Error, TEXT("Player %d, do Check: %hhd"), CurrentPlayer, GField->IsCheck(CurrentPlayer));
+	// Se è scacco matto allora termina il gioco
+	
+	const int32 ActualPlayer = CurrentPlayer;
+	
 	MoveCounter += 1;
 	CurrentPlayer = GetNextPlayer(CurrentPlayer);
+
+	if (GField->IsCheck(ActualPlayer))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Scacco"));
+		if (GField->IsCheckMate(CurrentPlayer))
+		{
+			IsGameOver = true;
+			UE_LOG(LogTemp, Error, TEXT("Scacco matto"));
+			return;
+		}
+		UE_LOG(LogTemp, Error, TEXT("Scacco non matto"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Non scacco - matto"));
+	}
+
+	
 	Players[CurrentPlayer]->OnTurn();
 }
 

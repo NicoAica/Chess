@@ -333,12 +333,12 @@ void AGameField::SpawnPedestrianOnTiles()
 	return Tmp;
  }
 
- bool AGameField::DoCheck(const int32 Player)
+ bool AGameField::IsCheck(const int32 Player)
  {
 	TMap<FVector2D, ATile*> Tmp;
 	GetYourTile(Player, Tmp);
 
-	UE_LOG(LogTemp, Error, TEXT("Player %d ha %d pedine"), Player, Tmp.Num());
+	//UE_LOG(LogTemp, Error, TEXT("Player %d ha %d pedine"), Player, Tmp.Num());
 
 	auto It = Tmp.CreateIterator();
 	while (It)
@@ -358,6 +358,27 @@ void AGameField::SpawnPedestrianOnTiles()
 	return false;
  }
 
+ bool AGameField::IsCheckMate(const int32 Player)
+ {
+	// Controllo se per ogni pedina del player non ci sono mosse possibili
+	TMap<FVector2D, ATile*> Tmp;
+	GetYourTile(Player, Tmp);
+
+	auto It = Tmp.CreateIterator();
+
+	int32 Count = 0;
+	
+	while (It)
+	{
+		It.Value()->GetPiece()->CalculatePossibleMove(true);
+		if (It.Value()->GetPiece()->PossibleMove.Num())
+		{
+			Count++;
+		}
+		++It;
+	}
+	return Count == 0;
+ }
 
 
  FVector AGameField::GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const

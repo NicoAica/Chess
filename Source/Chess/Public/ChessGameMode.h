@@ -42,9 +42,6 @@ public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// set the cell sign and the position 
-	void SetCellPawn(const int32 PlayerNumber, const FVector& SpawnPosition);
-
 	// get the next player index
 	int32 GetNextPlayer(int32 Player) const;
 
