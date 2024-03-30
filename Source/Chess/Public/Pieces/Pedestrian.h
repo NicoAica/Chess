@@ -23,7 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	virtual int32 CalculatePossibleMove() override;
+	virtual int32 CalculatePossibleMove(const bool CheckScacco = true) override;
 	
 };
 

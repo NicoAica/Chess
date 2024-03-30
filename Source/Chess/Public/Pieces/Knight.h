@@ -20,6 +20,6 @@ public:
 	
 	virtual void BeginPlay() override;
 
-	virtual int32 CalculatePossibleMove() override;
+	virtual int32 CalculatePossibleMove(const bool CheckScacco = true) override;
 	
 };

@@ -31,17 +31,23 @@ public:
 
 	void GenerateField();
 
-	FVector2D GetPosition(const FHitResult& Hit);
+	static FVector2D GetPosition(const FHitResult& Hit);
 
 	TArray<ATile*>& GetTileArray();
 
 	TMap<FVector2D, ATile*>& GetTileMap();
 
+	// Return only the tiles that belong to the player
+	TMap<FVector2D, ATile*>& GetYourTile(const int32 Player, TMap<FVector2D, ATile*>& Tmp);
+
+	// Check if Player make a check
+	bool DoCheck(const int32 Player);
+
 	FVector GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const;
 
-	FVector2D GetXYPositionByRelativeLocation(const FVector& Location) const;
+	static FVector2D GetXYPositionByRelativeLocation(const FVector& Location);
 
-	bool IsWinPosition(const FVector2D Position) const;
+	static bool IsWinPosition(const FVector2D Position);
 
 	inline bool IsValidPosition(const FVector2D Begin, const FVector2D End) const;
 
@@ -155,9 +161,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-
-	
 	
 
 };

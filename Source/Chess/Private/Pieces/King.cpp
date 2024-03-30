@@ -15,7 +15,7 @@ void AKing::BeginPlay()
 	Super::BeginPlay();
 }
 
-int32 AKing::CalculatePossibleMove()
+int32 AKing::CalculatePossibleMove(const bool CheckScacco)
 {
 
 	PossibleMove.Empty();
@@ -40,17 +40,17 @@ int32 AKing::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 			}
 		}
 	}
-	UE_LOG(LogTemp, Error, TEXT("Le sono: %d"), PossibleMove.Num())
+	//UE_LOG(LogTemp, Error, TEXT("Le sono: %d"), PossibleMove.Num())
 	return PossibleMove.Num();
 }

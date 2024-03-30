@@ -15,7 +15,7 @@ void ABishop::BeginPlay()
 	Super::BeginPlay();
 }
 
-int32 ABishop::CalculatePossibleMove()
+int32 ABishop::CalculatePossibleMove(const bool CheckScacco)
 {
 
 	PossibleMove.Empty();
@@ -25,7 +25,7 @@ int32 ABishop::CalculatePossibleMove()
 	ATile* Tmp = ActualTile;
 	
 	// Check on oblique top - right
-	Tmp = ActualTile;
+	//Tmp = ActualTile;
 	while (Tmp != nullptr)
 	{
 		FVector2D NewPosition = Tmp->GetGridPosition();
@@ -35,14 +35,14 @@ int32 ABishop::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -64,14 +64,15 @@ int32 ABishop::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
+
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -93,14 +94,14 @@ int32 ABishop::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -122,14 +123,14 @@ int32 ABishop::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}

@@ -52,14 +52,13 @@ void ARandomPlayer::OnTurn()
 
 	ATile* FutureTile = Tile->GetPiece()->GetRandomAvailableTile();
 
-	// Come metto il timer alla funzione sotto??
 	FTimerHandle UnusedHandle;
 	
 	GetWorldTimerManager().SetTimer(UnusedHandle, [this, FutureTile, Tile, GMode]()
 	{
 		MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0);
 		GMode->TurnNextPlayer();
-	}, 1.0f, false);
+	}, 2.0f, false);
 
 
 	//MoveActorTo(FutureTile, Tile->Piece, FutureTile->GetTileStatus() != Empty);
@@ -76,8 +75,9 @@ void ARandomPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool c
 	SelectedPiece->SetActorLocation(FuturePosition);
 
 	// Change Tile Info
+	FutureTile->SetTileStatus(1, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
 	SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-	FutureTile->SetTileStatus(1, Occupied);
+	SelectedPiece->GetActualTile()->SetPiece(nullptr);
 	SelectedPiece->SetActualTile(FutureTile);
 
 	if (Eat)

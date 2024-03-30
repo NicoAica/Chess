@@ -80,6 +80,7 @@ int32 AChessGameMode::GetNextPlayer(int32 Player) const
 
 void AChessGameMode::TurnNextPlayer()
 {
+	UE_LOG(LogTemp, Error, TEXT("Player %d, do Check: %hhd"), CurrentPlayer, GField->DoCheck(CurrentPlayer));
 	MoveCounter += 1;
 	CurrentPlayer = GetNextPlayer(CurrentPlayer);
 	Players[CurrentPlayer]->OnTurn();
@@ -94,5 +95,19 @@ void AChessGameMode::ChoosePlayerAndStartGame()
 		Players[i]->PlayerNumber = i;
 	}
 	MoveCounter += 1;
+
+	for (int32 i = 0; i < Players.Num(); i++)
+	{
+		TMap<FVector2D, ATile*> Tmp;
+		GField->GetYourTile(i, Tmp);
+
+		auto It = Tmp.CreateIterator();
+		while (It)
+		{
+			It.Value()->GetPiece()->CalculatePossibleMove(false);
+			++It;
+		}
+	}
+	
 	Players[CurrentPlayer]->OnTurn();
 }

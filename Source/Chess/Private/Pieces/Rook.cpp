@@ -15,7 +15,7 @@ void ARook::BeginPlay()
 	Super::BeginPlay();
 }
 
-int32 ARook::CalculatePossibleMove()
+int32 ARook::CalculatePossibleMove(const bool CheckScacco)
 {
 
 	PossibleMove.Empty();
@@ -32,14 +32,14 @@ int32 ARook::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -60,14 +60,14 @@ int32 ARook::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -88,14 +88,14 @@ int32 ARook::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -116,14 +116,14 @@ int32 ARook::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}

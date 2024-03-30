@@ -33,10 +33,10 @@ protected:
 	UPROPERTY()
 	ATile* ActualTile = nullptr;
 
+public:
+
 	UPROPERTY()
 	TMap<FVector2D, ATile*> PossibleMove;
-
-public:
 
 	void SetPlayerOwner(IPlayerInterface *Player);
 
@@ -52,7 +52,9 @@ public:
 	void ColorTilePossibleMove();
 	
 	// Use this method to calculate possible move
-	virtual int32 CalculatePossibleMove() { return 0; }
+	virtual int32 CalculatePossibleMove(const bool CheckScacco = true) { return 0; }
+
+	void AddPossibleMove(FVector2D Position, ATile* Tile, APiece* Piece, bool CheckScacco = true);
 
 	// Use this method to know if is a valid move (not safe move)
 	bool CanGoTo(FVector2D Position);

@@ -17,7 +17,7 @@ void APedestrian::BeginPlay()
 	Super::BeginPlay();
 }
 
-int32 APedestrian::CalculatePossibleMove()
+int32 APedestrian::CalculatePossibleMove(const bool CheckScacco)
 {
 	FVector2D Position = ActualTile->GetGridPosition();
 
@@ -31,7 +31,8 @@ int32 APedestrian::CalculatePossibleMove()
 	{
 		if ((*Tile)->GetTileStatus() == Empty)
 		{
-			PossibleMove.Add(Position, *Tile);
+			AddPossibleMove(Position, *Tile, this, CheckScacco);
+			//PossibleMove.Add(Position, *Tile);
 			
 			if ((*Tile)->GetTileStatus() != Occupied && Position.X == (ActualTile->GetOwner() == 0 ? 2 : 5))
 			{
@@ -40,7 +41,8 @@ int32 APedestrian::CalculatePossibleMove()
 				{
 					if ((*Tile2)->GetTileStatus() == Empty)
 					{
-						PossibleMove.Add(Position, *Tile2);
+						//PossibleMove.Add(Position, *Tile2);
+						AddPossibleMove(Position, *Tile2, this, CheckScacco);
 					}
 				}
 				ActualTile->GetOwner() == 0 ? Position.X -= 1 : Position.X += 1;
@@ -54,7 +56,8 @@ int32 APedestrian::CalculatePossibleMove()
 	{
 		if ((*Tile)->GetTileStatus() != Empty && (*Tile)->GetOwner() != ActualTile->GetOwner())
 		{
-			PossibleMove.Add(Position, *Tile);
+			//PossibleMove.Add(Position, *Tile);
+			AddPossibleMove(Position, *Tile, this, CheckScacco);
 			//UE_LOG(LogTemp, Error, TEXT("%s"), *(*Tile)->GetGridPosition().ToString());
 		}
 	}
@@ -65,7 +68,8 @@ int32 APedestrian::CalculatePossibleMove()
 	{
 		if ((*Tile)->GetTileStatus() != Empty && (*Tile)->GetOwner() != ActualTile->GetOwner())
 		{
-			PossibleMove.Add(Position, *Tile);
+			//PossibleMove.Add(Position, *Tile);
+			AddPossibleMove(Position, *Tile, this, CheckScacco);
 		}
 	}
 

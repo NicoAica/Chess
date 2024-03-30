@@ -61,6 +61,68 @@ void APiece::ColorTilePossibleMove()
 	}
 }
 
+void APiece::AddPossibleMove(const FVector2D Position, ATile* Tile, APiece* Piece, const bool CheckScacco)
+{
+	if (CheckScacco)
+	{
+		ATile* OldTile = Piece->GetActualTile();
+
+		bool B_IsOccupied = false;
+		bool B_IsKing = false;
+		APiece* PieceOnTile = nullptr;
+		int32 FutureTileOwner = -1;
+
+		bool IsSafe;
+		
+		if (Tile->GetTileStatus() != Empty) 
+		{
+			PieceOnTile = Tile->GetPiece();
+			FutureTileOwner = Tile->GetOwner();
+			B_IsOccupied = true;
+			B_IsKing = Tile->B_IsKingTile;
+		}
+		
+		Tile->SetTileStatus(OldTile->GetOwner(), Occupied, OldTile->B_IsKingTile);
+		Tile->SetPiece(Piece);
+		Piece->SetActualTile(Tile);
+		
+		OldTile->SetTileStatus(-1, Empty, false);
+		OldTile->SetPiece(nullptr);
+		
+		
+		if (Tile->GetOwner() == 0)
+		{
+			IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DoCheck(1);
+		}
+		else
+		{
+			IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DoCheck(0);
+		}
+		
+		OldTile->SetTileStatus(Tile->GetOwner(), Occupied, Tile->B_IsKingTile);
+		OldTile->SetPiece(Tile->GetPiece());
+		Piece->SetActualTile(OldTile);
+
+		Tile->SetTileStatus(-1, Empty, false);
+		Tile->SetPiece(PieceOnTile);
+
+		if (B_IsOccupied)
+		{
+			Tile->SetTileStatus(FutureTileOwner, Occupied, B_IsKing);
+			PieceOnTile->SetActualTile(Tile);
+		}
+
+		if (IsSafe)
+		{
+			PossibleMove.Add(Position, Tile);
+		}
+	}
+	else
+	{
+		PossibleMove.Add(Position, Tile);
+	}
+}
+
 bool APiece::CanGoTo(FVector2D const Position)
 {
 	if (PossibleMove.Find(Position))

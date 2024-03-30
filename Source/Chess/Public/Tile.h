@@ -24,7 +24,7 @@ public:
 	// Sets default values for this actor's properties
 	ATile();
 
-	void SetTileStatus(const int32 TileOwner, const ETileStatus TileStatus);
+	void SetTileStatus(const int32 TileOwner, const ETileStatus TileStatus, const bool IsKingTile = false);
 	
 	ETileStatus GetTileStatus();
 	int32 GetOwner();
@@ -47,6 +47,8 @@ public:
 	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
 	UMaterialInstance *MaterialInstanceTileLightYellow;
 
+	UPROPERTY()
+	bool B_IsKingTile = false;
 
 	APiece* GetPiece();
 	void SetPiece(APiece* P);

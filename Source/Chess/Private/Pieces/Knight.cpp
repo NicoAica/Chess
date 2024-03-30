@@ -16,7 +16,7 @@ void AKnight::BeginPlay()
 	Super::BeginPlay();
 }
 
-int32 AKnight::CalculatePossibleMove()
+int32 AKnight::CalculatePossibleMove(const bool CheckScacco)
 {
 
 	PossibleMove.Empty();
@@ -41,13 +41,13 @@ int32 AKnight::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 			}
 		}

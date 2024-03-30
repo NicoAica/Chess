@@ -43,8 +43,9 @@ void AHumanPlayer::MoveActorTo(ATile* FutureTile)
 	SelectedPiece->SetActorLocation(FuturePosition);
 
 	// Change Tile Info
+	FutureTile->SetTileStatus(0, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
 	SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-	FutureTile->SetTileStatus(0, Occupied);
+	SelectedPiece->GetActualTile()->SetPiece(nullptr);
 	SelectedPiece->SetActualTile(FutureTile);
 	FutureTile->SetPiece(SelectedPiece);
 
@@ -104,7 +105,9 @@ void AHumanPlayer::OnClick()
 				//CurrPiece->CalculatePossibleMoveAndColorTile();
 				int32 Test = CurrPiece->CalculatePossibleMove();
 
-				UE_LOG(LogTemp, Error, TEXT("Pedina %s con valori %d"), *CurrPiece->GetFullName(), Test);
+				//UE_LOG(LogTemp, Error, TEXT("Pedina %s con valori %d"), *CurrPiece->GetFullName(), Test);
+				//UE_LOG(LogTemp, Error, TEXT("è il re?: %hhd"), CurrPiece->GetActualTile()->B_IsKingTile);
+
 				
 				CurrPiece->ColorTilePossibleMove();
 			}

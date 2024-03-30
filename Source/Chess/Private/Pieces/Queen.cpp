@@ -16,11 +16,14 @@ void AQueen::BeginPlay()
 	Super::BeginPlay();
 }
 
-int32 AQueen::CalculatePossibleMove()
+int32 AQueen::CalculatePossibleMove(const bool CheckScacco)
 {
 	PossibleMove.Empty();
 
+	//AGameField *GField = Cast<AGameField>(GetWorld()->GetAuthGameMode());
+
 	TMap<FVector2D, ATile*> TileMap = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->GetTileMap();
+	
 	
 	// Check on horizontal right
 	ATile* Tmp = ActualTile;
@@ -32,14 +35,14 @@ int32 AQueen::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -60,14 +63,14 @@ int32 AQueen::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -88,14 +91,14 @@ int32 AQueen::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -116,14 +119,14 @@ int32 AQueen::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -145,14 +148,14 @@ int32 AQueen::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -174,14 +177,14 @@ int32 AQueen::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -203,14 +206,14 @@ int32 AQueen::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}
@@ -232,14 +235,14 @@ int32 AQueen::CalculatePossibleMove()
 		{
 			if ((*NewTile)->GetTileStatus() != Occupied)
 			{
-				PossibleMove.Add(NewPosition, (*NewTile));
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				Tmp = (*NewTile);
 			}
 			else
 			{
 				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
 				{
-					PossibleMove.Add(NewPosition, (*NewTile));
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
 				}
 				Tmp = nullptr;
 			}

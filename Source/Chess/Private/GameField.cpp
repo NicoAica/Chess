@@ -53,9 +53,9 @@ AGameField::AGameField()
 			TileMap.Add(FVector2D(x, y), Obj);
 		}
 	}
-	SpawnPedestrianOnTiles();
+	//SpawnPedestrianOnTiles();
 	SpawnQueensOnTile();
-	SpawnKnightsOnTile();
+	//SpawnKnightsOnTile();
 	SpawnRooksOnTile();
 	SpawnBishopsOnTile();
 	SpawnKingsOnTile();
@@ -266,8 +266,9 @@ void AGameField::SpawnPedestrianOnTiles()
 	King->SetActualTile(Obj);
 	King->StaticMeshComponent->SetMaterial(0, MaterialInstanceKingWhite);
 	King->SetActorScale3D(FVector(TileScale, TileScale, 1));
-	Obj->SetTileStatus(0, Occupied);
+	Obj->SetTileStatus(0, Occupied, true);
 	Obj->SetPiece(King);
+	Obj->B_IsKingTile = true;
 
 
 	// Black King
@@ -278,7 +279,7 @@ void AGameField::SpawnPedestrianOnTiles()
 	King->SetActualTile(Obj);
 	King->StaticMeshComponent->SetMaterial(0, MaterialInstanceKingBlack);
 	King->SetActorScale3D(FVector(TileScale, TileScale, 1));
-	Obj->SetTileStatus(1, Occupied);
+	Obj->SetTileStatus(1, Occupied, true);
 	Obj->SetPiece(King);
  }
 
@@ -318,19 +319,60 @@ void AGameField::SpawnPedestrianOnTiles()
 	return TileMap;
  }
 
+ TMap<FVector2D, ATile*>& AGameField::GetYourTile(const int32 Player, TMap<FVector2D, ATile*>& Tmp)
+ {
+	auto It = TileMap.CreateIterator();
+	while (It)
+	{
+		if (It.Value()->GetOwner() == Player)
+		{
+			Tmp.Add(It.Key(), It.Value());
+		}
+		++It;
+	}
+	return Tmp;
+ }
+
+ bool AGameField::DoCheck(const int32 Player)
+ {
+	TMap<FVector2D, ATile*> Tmp;
+	GetYourTile(Player, Tmp);
+
+	UE_LOG(LogTemp, Error, TEXT("Player %d ha %d pedine"), Player, Tmp.Num());
+
+	auto It = Tmp.CreateIterator();
+	while (It)
+	{
+		It.Value()->GetPiece()->CalculatePossibleMove(false);
+		auto It2 = It.Value()->GetPiece()->PossibleMove.CreateIterator();
+		while (It2)
+		{
+			if (It2.Value()->B_IsKingTile)
+			{
+				return true;
+			}
+			++It2;
+		}
+		++It;
+	}
+	return false;
+ }
+
+
+
  FVector AGameField::GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const
  {
 	return TileSize * FVector(InX, InY, 0);
  }
 
- FVector2D AGameField::GetXYPositionByRelativeLocation(const FVector& Location) const
+ FVector2D AGameField::GetXYPositionByRelativeLocation(const FVector& Location)
  {
 	const double x = Location[0];
 	const double y = Location[1];
 	return  FVector2D(x, y);
  }
 
- bool AGameField::IsWinPosition(const FVector2D Position) const
+ bool AGameField::IsWinPosition(const FVector2D Position)
  {
 	return false; // TODO
  }
