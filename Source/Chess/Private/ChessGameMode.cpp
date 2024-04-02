@@ -106,8 +106,6 @@ void AChessGameMode::ChoosePlayerAndStartGame()
 			++It;
 		}
 	}
-
-	CurrentPlayer = 1;
 	
 	Players[CurrentPlayer]->OnTurn();
 }

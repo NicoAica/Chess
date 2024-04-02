@@ -203,6 +203,9 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 	auto It = BlackPieces.CreateIterator();
 	while (It)
 	{
+		// Calculate possible moves of piece
+		It->Value->GetPiece()->CalculatePossibleMove();
+		
 		// Get all possible moves of piece
 		TMap<FVector2D, ATile*> PossibleMoves = It->Value->GetPiece()->PossibleMove;
 			

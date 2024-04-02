@@ -54,11 +54,11 @@ AGameField::AGameField()
 		}
 	}
 	SpawnPedestrianOnTiles();
-	//SpawnQueensOnTile();
-	//SpawnKnightsOnTile();
-	//SpawnRooksOnTile();
-	//SpawnBishopsOnTile();
-	//SpawnKingsOnTile();
+	SpawnQueensOnTile();
+	SpawnKnightsOnTile();
+	SpawnRooksOnTile();
+	SpawnBishopsOnTile();
+	SpawnKingsOnTile();
 	
 	DefaultTileColor();
  }
@@ -66,7 +66,7 @@ AGameField::AGameField()
 void AGameField::SpawnPedestrianOnTiles()
 {
 	const float TileScale = TileSize / 100;
-
+/*
 	FVector Location = GetRelativeLocationByXYPosition(2, 0);
 	Location.Z = 4.5;
 	ATile* Obj = *TileMap.Find(FVector2D(2, 0));
@@ -108,7 +108,7 @@ void AGameField::SpawnPedestrianOnTiles()
 	Obj->SetPiece(Pedestri);
 
 	
-	/*
+	*/
 	for (int i = 0; i < Size; i++)
 	{
 		
@@ -133,7 +133,7 @@ void AGameField::SpawnPedestrianOnTiles()
 		Pedestrian->SetActualTile(Obj);
 		Obj->SetTileStatus(1, Occupied);
 		Obj->SetPiece(Pedestrian);
-	}*/
+	}
 	
 }
 
