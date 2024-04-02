@@ -59,12 +59,56 @@ AGameField::AGameField()
 	//SpawnRooksOnTile();
 	//SpawnBishopsOnTile();
 	//SpawnKingsOnTile();
+	
 	DefaultTileColor();
  }
 
 void AGameField::SpawnPedestrianOnTiles()
 {
 	const float TileScale = TileSize / 100;
+
+	FVector Location = GetRelativeLocationByXYPosition(2, 0);
+	Location.Z = 4.5;
+	ATile* Obj = *TileMap.Find(FVector2D(2, 0));
+	ARook* Pedestrian = GetWorld()->SpawnActor<ARook>(RookClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Pedestrian->SetActualTile(Obj);
+	Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstanceRookWhite);
+	Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(0, Occupied);
+	Obj->SetPiece(Pedestrian);
+
+	Location = GetRelativeLocationByXYPosition(1, 0);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(1, 0));
+	AKnight* Pedestria = GetWorld()->SpawnActor<AKnight>(KnightClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Pedestria->SetActualTile(Obj);
+	Pedestria->StaticMeshComponent->SetMaterial(0, MaterialInstanceKnightWhite);
+	Pedestria->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(0, Occupied);
+	Obj->SetPiece(Pedestria);
+
+	Location = GetRelativeLocationByXYPosition(1, 2);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(1, 2));
+	ABishop* Pedestri = GetWorld()->SpawnActor<ABishop>(BishopClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Pedestri->SetActualTile(Obj);
+	Pedestri->StaticMeshComponent->SetMaterial(0, MaterialInstanceBishopWhite);
+	Pedestri->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(0, Occupied);
+	Obj->SetPiece(Pedestri);
+
+	Location = GetRelativeLocationByXYPosition(0, 1);
+	Location.Z = 4.5;
+	Obj = *TileMap.Find(FVector2D(0, 1));
+	Pedestri = GetWorld()->SpawnActor<ABishop>(BishopClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	Pedestri->SetActualTile(Obj);
+	Pedestri->StaticMeshComponent->SetMaterial(0, MaterialInstanceBishopBlack);
+	Pedestri->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	Obj->SetTileStatus(1, Occupied);
+	Obj->SetPiece(Pedestri);
+
+	
+	/*
 	for (int i = 0; i < Size; i++)
 	{
 		
@@ -80,16 +124,17 @@ void AGameField::SpawnPedestrianOnTiles()
 		Obj->SetPiece(Pedestrian);
 
 		// Black Pedestrian
-		Location = GetRelativeLocationByXYPosition(3, i);
+		Location = GetRelativeLocationByXYPosition(6, i);
 		Location.Z = 4.5;
-		Obj = *TileMap.Find(FVector2D(3, i));
+		Obj = *TileMap.Find(FVector2D(6, i));
 		Pedestrian = GetWorld()->SpawnActor<APedestrian>(PedestrianClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
 		Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstancePedestrianBlack);
 		Pedestrian->SetActorScale3D(FVector(TileScale, TileScale, 1));
 		Pedestrian->SetActualTile(Obj);
 		Obj->SetTileStatus(1, Occupied);
 		Obj->SetPiece(Pedestrian);
-	}
+	}*/
+	
 }
 
  void AGameField::SpawnQueensOnTile()
@@ -403,6 +448,58 @@ void AGameField::SpawnPedestrianOnTiles()
 	FuturePosition->SetTileStatus(Player, Occupied, false);
 	FuturePosition->SetPiece(Queen);
 	Queen->CalculatePossibleMove();
+ }
+
+ int32 AGameField::ValueOfChessBoard()
+ {
+
+	// Get White Pieces
+	TMap<FVector2D, ATile*> WhitePieces;
+	GetYourTile(0, WhitePieces);
+
+	// Get Black Pieces
+	TMap<FVector2D, ATile*> BlackPieces;
+	GetYourTile(1, BlackPieces);
+
+	int32 Value = 0;
+
+	auto It = WhitePieces.CreateIterator();
+	while (It)
+	{
+		Value += ValueOfPiece(It.Value()->GetPiece());
+		++It;
+	}
+	auto It1 = BlackPieces.CreateIterator();
+	while (It1)
+	{
+		Value -= ValueOfPiece(It1.Value()->GetPiece());
+		++It1;
+	}
+	
+	return Value;
+ }
+
+ int32 AGameField::ValueOfPiece(const APiece* Piece)
+ {
+	 if (Cast<APedestrian>(Piece))
+	 {
+		 return 1;
+	 }
+	if (Cast<ABishop>(Piece) || Cast<AKnight>(Piece))
+	 {
+		 return 3;
+	 }
+	if (Cast<ARook>(Piece))
+	 {
+		 return 5;
+	 }
+	 if (Cast<AQueen>(Piece))
+	 {
+		 return 9;
+	 }
+
+	// King doesn't have value
+	return 0;
  }
 
 

@@ -42,6 +42,7 @@ void ARandomPlayer::OnTurn()
 		Tile = GField->GetTileOfBlackPiece(rand() % GField->GetNumberOfBlackPiece());
 		if (Test > 150)
 		{
+			// TODO implement patta
 			return;
 		}
 	}
@@ -57,12 +58,9 @@ void ARandomPlayer::OnTurn()
 	GetWorldTimerManager().SetTimer(UnusedHandle, [this, FutureTile, Tile, GMode]()
 	{
 		MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0);
+		UE_LOG(LogTemp, Error, TEXT("Valore della scacchiera: %d"), GMode->GField->ValueOfChessBoard());
 		GMode->TurnNextPlayer();
-	}, 4.0f, false);
-
-
-	//MoveActorTo(FutureTile, Tile->Piece, FutureTile->GetTileStatus() != Empty);
-	
+	}, 0.1f, false);
 }
 
 void ARandomPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool const Eat) const

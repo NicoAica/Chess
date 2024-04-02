@@ -49,6 +49,11 @@ public:
 	// Promote
 	void Promote(ATile* FuturePosition, int32 Player);
 
+	// Use this method to calculate the value of the chess board
+	int32 ValueOfChessBoard();
+
+	int32 ValueOfPiece(const APiece* Piece);
+
 	FVector GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const;
 
 	static FVector2D GetXYPositionByRelativeLocation(const FVector& Location);
