@@ -46,6 +46,9 @@ public:
 	// Check if Player make a check
 	bool IsCheckMate(const int32 Player);
 
+	// Check if there are available moves
+	bool IsStaleMate(const int32 Player);
+
 	// Promote
 	void Promote(ATile* FuturePosition, int32 Player);
 

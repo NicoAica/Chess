@@ -33,6 +33,7 @@ void AMinMaxPlayer::OnTurn()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AI MinMax Turn"));
 	auto const GField = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField;
 
+	
 	int32 _MinMax = MinMax(0, false);
 	UE_LOG(LogTemp, Warning, TEXT("Best value: %d"), _MinMax);
 
@@ -94,6 +95,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 {
 	if (Depth > Difficulty)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Value of chess board: %d"), Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->ValueOfChessBoard());
 		return Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->ValueOfChessBoard();
 	}
 	
@@ -128,9 +130,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 				bool B_IsKing = false;
 				APiece* PieceOnTile = nullptr;
 				int32 FutureTileOwner = -1;
-
-				//bool IsSafe;
-		
+				
 				if (Tile->GetTileStatus() != Empty) 
 				{
 					PieceOnTile = Tile->GetPiece();
@@ -146,20 +146,28 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 				OldTile->SetTileStatus(-1, Empty, false);
 				OldTile->SetPiece(nullptr);
 				
-				/*if (Tile->GetOwner() == 0)
-				{
-					IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(1);
-				}
-				else
-				{
-					IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(0);
-				}*/
-
-				int32 ChessBoardValue = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->ValueOfChessBoard();
 				
 				//UE_LOG(LogTemp, Warning, TEXT("Value of chess board: %d"), ChessBoardValue);
 
-				int32 Min = MinMax(Depth + 1, false);
+				
+				int32 Min;
+				if (Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(0))
+				{
+					if (Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheckMate(1))
+					{
+						Max = 50;
+					}
+					else
+					{
+						// Assigned to check 4 points
+						Max = MinMax(Depth + 1, true) + 4;
+					}
+				}
+				else
+				{
+					Min = MinMax(Depth + 1, false);
+				}
+				
 				
 				OldTile->SetTileStatus(Tile->GetOwner(), Occupied, Tile->B_IsKingTile);
 				OldTile->SetPiece(Tile->GetPiece());
@@ -238,20 +246,29 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 		
 			OldTile->SetTileStatus(-1, Empty, false);
 			OldTile->SetPiece(nullptr);
-				
-			/*if (Tile->GetOwner() == 0)
+
+			int32 Max;
+			
+			if (Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(1))
+			{
+				if (Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheckMate(0))
 				{
-					IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(1);
+					Max = -50;
 				}
 				else
 				{
-					IsSafe = !Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(0);
-				}*/
-
-			//UE_LOG(LogTemp, Warning, TEXT("Value of chess board: %d"), Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->ValueOfChessBoard());
-
-			int32 Max = MinMax(Depth + 1, true);
-		
+					// Assigned to check 4 points
+					Max = MinMax(Depth + 1, true);
+					UE_LOG(LogTemp, Warning, TEXT("Passo a volte qui dentro, Max: %d"), Max);
+					Max -= 4;
+				}
+				UE_LOG(LogTemp, Warning, TEXT("Passo a volte qui, Max: %d"), Max);
+			}
+			else
+			{
+				Max = MinMax(Depth + 1, true);
+			}
+			
 			OldTile->SetTileStatus(Tile->GetOwner(), Occupied, Tile->B_IsKingTile);
 			OldTile->SetPiece(Tile->GetPiece());
 			Piece->SetActualTile(OldTile);

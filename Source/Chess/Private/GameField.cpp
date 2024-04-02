@@ -53,11 +53,11 @@ AGameField::AGameField()
 			TileMap.Add(FVector2D(x, y), Obj);
 		}
 	}
-	SpawnPedestrianOnTiles();
+	//SpawnPedestrianOnTiles();
 	SpawnQueensOnTile();
-	SpawnKnightsOnTile();
+	//SpawnKnightsOnTile();
 	SpawnRooksOnTile();
-	SpawnBishopsOnTile();
+	//SpawnBishopsOnTile();
 	SpawnKingsOnTile();
 	
 	DefaultTileColor();
@@ -144,19 +144,19 @@ void AGameField::SpawnPedestrianOnTiles()
 	// White Queen
 	FVector Location = GetRelativeLocationByXYPosition(0, 3);
 	Location.Z = 4.5;
-	ATile* Obj = *TileMap.Find(FVector2D(0, 3));
+	/*ATile* Obj = *TileMap.Find(FVector2D(0, 3));
 	AQueen* Queen = GetWorld()->SpawnActor<AQueen>(QueenClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
 	Queen->SetActualTile(Obj);
 	Queen->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenWhite);
 	Queen->SetActorScale3D(FVector(TileScale, TileScale, 1));
 	Obj->SetTileStatus(0, Occupied);
 	Obj->SetPiece(Queen);
-
+*/
 	// Black Queen
 	Location = GetRelativeLocationByXYPosition(7, 3);
 	Location.Z = 4.5;
-	Obj = *TileMap.Find(FVector2D(7, 3));
-	Queen = GetWorld()->SpawnActor<AQueen>(QueenClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	ATile* Obj = *TileMap.Find(FVector2D(7, 3));
+	AQueen* Queen = GetWorld()->SpawnActor<AQueen>(QueenClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
 	Queen->SetActualTile(Obj);
 	Queen->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenBlack);
 	Queen->SetActorScale3D(FVector(TileScale, TileScale, 1));
@@ -406,6 +406,11 @@ void AGameField::SpawnPedestrianOnTiles()
 
  bool AGameField::IsCheckMate(const int32 Player)
  {
+	return IsStaleMate(Player);
+ }
+
+ bool AGameField::IsStaleMate(const int32 Player)
+ {
 	// Controllo se per ogni pedina del player non ci sono mosse possibili
 	TMap<FVector2D, ATile*> Tmp;
 	GetYourTile(Player, Tmp);
@@ -425,6 +430,7 @@ void AGameField::SpawnPedestrianOnTiles()
 	}
 	return Count == 0;
  }
+
 
  void AGameField::Promote(ATile* FuturePosition, int32 const Player)
  {

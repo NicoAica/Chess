@@ -80,6 +80,15 @@ void AChessGameMode::TurnNextPlayer()
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Check!"));
 	}
+	else
+	{
+		if (GField->IsStaleMate(CurrentPlayer))
+		{
+			IsGameOver = true;
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Stale Mate!"));
+			return;
+		}
+	}
 		
 	Players[CurrentPlayer]->OnTurn();
 }
