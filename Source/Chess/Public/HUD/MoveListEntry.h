@@ -18,8 +18,13 @@ class CHESS_API UMoveListEntry : public UUserWidget
 	
 public:
 
+	UPROPERTY(BlueprintReadWrite)
+	int32 MoveIndex;
+
 	UPROPERTY(EditAnywhere, meta=(BindWidget), Category="Move List Entry Settings")
 	class UTextBlock* MoveTextBlock;
 
+	UPROPERTY(EditAnywhere, meta=(BindWidget), Category="Move List Entry Settings")
+	class UButton* ResetButton;
 	
 };

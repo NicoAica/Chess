@@ -3,6 +3,7 @@
 
 #include "GameField.h"
 
+#include "ChessGameInstance.h"
 #include "ChessGameMode.h"
 #include "Pieces/Pedestrian.h"
 #include "Piece.h"
@@ -18,6 +19,11 @@ AGameField::AGameField()
 	
 }
 
+ void AGameField::UndoMoves(const int32 MoveNumber)
+ {
+	Cast<UChessGameInstance>(GetGameInstance())->UndoTillMove(MoveNumber);
+ }
+/*
  void AGameField::ResetField()
  {
 	for (ATile* Obj : TileArray)
@@ -34,7 +40,7 @@ AGameField::AGameField()
 	GameMode->ChoosePlayerAndStartGame();
 	
  }
-
+*/
  void AGameField::GenerateField()
  {
 
@@ -53,7 +59,7 @@ AGameField::AGameField()
 			TileMap.Add(FVector2D(x, y), Obj);
 		}
 	}
-	//SpawnPedestrianOnTiles();
+	SpawnPedestrianOnTiles();
 	SpawnQueensOnTile();
 	//SpawnKnightsOnTile();
 	SpawnRooksOnTile();

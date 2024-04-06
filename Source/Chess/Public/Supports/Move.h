@@ -18,9 +18,9 @@ class CHESS_API UMove : public UObject
 public:
 	UMove();
 
-	UMove(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat);
+	UMove(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat, APiece* InEatenPiece = nullptr);
 
-	void Initialize(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat);
+	void Initialize(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat, APiece* InEatenPiece = nullptr);
 
 	UPROPERTY(Transient)
 	ATile* Origin;
@@ -30,5 +30,9 @@ public:
 
 	UPROPERTY(Transient)
 	APiece* Piece;
+
+	UPROPERTY(Transient)
+	APiece* EatenPiece;
+	
 	bool Eat;
 };

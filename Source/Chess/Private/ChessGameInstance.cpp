@@ -33,6 +33,12 @@ void UChessGameInstance::AddResult(bool const HumanPlayer) const
 	}
 }
 
+void UChessGameInstance::AddStaleMate() const
+{
+	MoveHUD->AddInList("1/2 - 1/2");
+}
+
+
 void UChessGameInstance::AddMove(UMove* Move)
 {
 	Moves.Add(Move);
@@ -43,7 +49,9 @@ void UChessGameInstance::AddMove(UMove* Move)
 		FixIfOtherPieceCanGoToTile(Move->Origin, Move->Destination, Move->Piece) +
 		(Move->Eat ? "x" : "") +
 		GetYInChar(Move->Destination->GetGridPosition().Y) +
-		FString::FromInt(Move->Destination->GetGridPosition().X + 1)
+		FString::FromInt(Move->Destination->GetGridPosition().X + 1),
+		Move->Destination->GetOwner() == 0,
+		MoveCounter
 		);
 		
 	MoveCounter++;
@@ -94,7 +102,6 @@ char UChessGameInstance::FixIfOtherPieceCanGoToTile(ATile* OriginTile, ATile* De
 		APiece* const P = Elem.Value->GetPiece();
 		if ((P != Piece) && (GetNameOfPiece(P) == GetNameOfPiece(Piece)) && (P->PossibleMove.Find(DestinationTile->GetGridPosition()) != nullptr))
 		{
-			UE_LOG(LogTemp, Error, TEXT("Other piece can go to tile"));
 			if (P->GetActualTile()->GetGridPosition().Y == OriginTile->GetGridPosition().Y)
 			{
 				return static_cast<char>(OriginTile->GetGridPosition().X + 49);
@@ -103,4 +110,9 @@ char UChessGameInstance::FixIfOtherPieceCanGoToTile(ATile* OriginTile, ATile* De
 		}
 	}
 	return 0;
+}
+
+void UChessGameInstance::UndoTillMove(const int32 MoveIndex)
+{
+	UE_LOG(LogTemp, Error, TEXT("UndoMoves %d"), MoveIndex);
 }

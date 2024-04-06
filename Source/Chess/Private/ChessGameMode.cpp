@@ -91,6 +91,7 @@ void AChessGameMode::TurnNextPlayer(UMove* Move)
 	{
 		if (GField->IsStaleMate(CurrentPlayer))
 		{
+			Cast<UChessGameInstance>(GetGameInstance())->AddStaleMate();
 			IsGameOver = true;
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Stale Mate!"));
 			return;

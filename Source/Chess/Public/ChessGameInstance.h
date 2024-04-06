@@ -16,9 +16,7 @@ UCLASS()
 class CHESS_API UChessGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-
-	FString LastMove;
-
+	
 	UPROPERTY(Transient)
 	UMoveHUD* MoveHUD;
 
@@ -34,6 +32,8 @@ public:
 	void SetCheck() const;
 
 	void AddResult(bool HumanPlayer) const;
+
+	void AddStaleMate() const;
 	
 	void AddMove(UMove* Move);
 
@@ -45,6 +45,8 @@ public:
 
 	// Check if other pieces (of the same player and same type) can go to the tile
 	char FixIfOtherPieceCanGoToTile(ATile* OriginTile, ATile* DestinationTile, APiece* Piece) const;
+
+	void UndoTillMove(const int32 MoveIndex);
 	
 };
 

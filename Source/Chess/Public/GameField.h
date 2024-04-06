@@ -27,7 +27,7 @@ public:
 	//virtual void OnConstruction(const FTransform& Transform) override;
 
 	UFUNCTION(BlueprintCallable)
-	void ResetField();
+	void UndoMoves(int32 MoveNumber);
 
 	void GenerateField();
 

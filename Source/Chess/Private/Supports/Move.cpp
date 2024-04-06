@@ -9,20 +9,23 @@ UMove::UMove()
 	Destination = nullptr;
 	Piece = nullptr;
 	Eat = false;
+	EatenPiece = nullptr;
 }
 
-UMove::UMove(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat)
+UMove::UMove(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat, APiece* InEatenPiece)
 {
 	this->Origin = InOrigin;
 	this->Destination = InDestination;
 	this->Piece = InPiece;
 	this->Eat = InEat;
+	this->EatenPiece = InEatenPiece;
 }
 
-void UMove::Initialize(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat)
+void UMove::Initialize(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat, APiece* InEatenPiece)
 {
 	this->Origin = InOrigin;
 	this->Destination = InDestination;
 	this->Piece = InPiece;
 	this->Eat = InEat;
+	this->EatenPiece = InEatenPiece;
 }
