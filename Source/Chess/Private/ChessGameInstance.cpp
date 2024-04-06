@@ -65,6 +65,16 @@ void UChessGameInstance::SetMoveHud(UMoveHUD* MoveHud)
 	MoveHUD = MoveHud;
 }
 
+void UChessGameInstance::SetErrorMessage() const
+{
+	MoveHUD->SetErrorMessage();
+}
+
+void UChessGameInstance::HiddenErrorMessage() const
+{
+	MoveHUD->HiddenErrorMessage();
+}
+
 char UChessGameInstance::GetYInChar(const int32 Y)
 {
 	return static_cast<char>(Y + 97);

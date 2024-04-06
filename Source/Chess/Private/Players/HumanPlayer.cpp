@@ -79,7 +79,6 @@ void AHumanPlayer::MoveActorTo(APiece* EvilPiece)
 {
 	ATile* Tmp = EvilPiece->GetActualTile();
 	EvilPiece->SelfDestroy();
-	UE_LOG(LogTemp, Error, TEXT("Mangiato il pezzo %s con proprietario %d"), *EvilPiece->GetName(), Tmp->GetOwner());
 	MoveActorTo(Tmp);
 }
 

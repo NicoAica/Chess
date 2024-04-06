@@ -20,7 +20,22 @@ AGameField::AGameField()
 
  void AGameField::UndoMoves(const int32 MoveNumber)
  {
-	Cast<UChessGameInstance>(GetGameInstance())->UndoTillMove(MoveNumber);
+	 if (Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->CurrentPlayer != 0)
+	 {
+	 	Cast<UChessGameInstance>(GetGameInstance())->SetErrorMessage();
+	 	
+	 	FTimerHandle UnusedHandle;
+	 	GetWorldTimerManager().SetTimer(UnusedHandle, [this]()
+		 {
+	 		Cast<UChessGameInstance>(GetGameInstance())->HiddenErrorMessage();
+		 }, 3.0f, false);
+	 }
+	 else
+	 {
+	 	Cast<UChessGameInstance>(GetGameInstance())->UndoTillMove(MoveNumber);
+	 }
+	 
+	
 
 	// Reset possible move (With undo we can't use the same possible move)
 	/*for (ATile* Tile : TileArray)

@@ -40,6 +40,10 @@ public:
 	void AddMove(UMove* Move);
 
 	void SetMoveHud(UMoveHUD* MoveHud);
+
+	void SetErrorMessage() const;
+
+	void HiddenErrorMessage() const;
 	
 	static char GetYInChar(const int32 Y);
 

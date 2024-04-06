@@ -17,11 +17,14 @@ UCLASS()
 class CHESS_API UMoveHUD : public UUserWidget
 {
 	GENERATED_BODY()
-
+	
 public:
 	
 	UPROPERTY(EditAnywhere, meta=(BindWidget), Category="Move HUD Settings")
 	UScrollBox* MoveList;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget), Category="Move HUD Settings")
+	UTextBlock* ErrorMessageTextBox;
 
 	UPROPERTY(EditAnywhere, Category="Move HUD Settings")
 	TSubclassOf<UMoveListEntry> MoveListEntryClass;
@@ -67,6 +70,16 @@ public:
 		{
 			MoveList->RemoveChildAt(MoveList->GetChildrenCount() - 1);
 		}
+	}
+
+	void SetErrorMessage() const
+	{
+		ErrorMessageTextBox->SetVisibility(ESlateVisibility::Visible);
+	}
+
+	void HiddenErrorMessage() const
+	{
+		ErrorMessageTextBox->SetVisibility(ESlateVisibility::Hidden);
 	}
 	
 };
