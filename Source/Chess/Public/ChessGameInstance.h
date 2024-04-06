@@ -27,6 +27,8 @@ class CHESS_API UChessGameInstance : public UGameInstance
 	
 	void SetCheckMate() const;
 
+	void UndoLastMove();
+
 public:
 
 	void SetCheck() const;

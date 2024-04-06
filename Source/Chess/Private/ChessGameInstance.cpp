@@ -20,6 +20,7 @@ void UChessGameInstance::SetCheckMate() const
 	MoveHUD->AddCheckMateInLastMove();
 }
 
+
 void UChessGameInstance::AddResult(bool const HumanPlayer) const
 {
 	SetCheckMate();
@@ -53,7 +54,9 @@ void UChessGameInstance::AddMove(UMove* Move)
 		Move->Destination->GetOwner() == 0,
 		MoveCounter
 		);
-		
+
+	//UE_LOG(LogTemp, Error, TEXT("Piece moved from Position: %s, piece eaten: %s"), *Move->Origin->GetActorLocation().ToString(), Move->EatenPiece ? *Move->EatenPiece->GetName() : TEXT("None"));
+	
 	MoveCounter++;
 }
 
@@ -115,4 +118,50 @@ char UChessGameInstance::FixIfOtherPieceCanGoToTile(ATile* OriginTile, ATile* De
 void UChessGameInstance::UndoTillMove(const int32 MoveIndex)
 {
 	UE_LOG(LogTemp, Error, TEXT("UndoMoves %d"), MoveIndex);
+
+	while (MoveCounter > MoveIndex)
+	{
+		MoveCounter--;
+		MoveHUD->PopLastMove();
+		UndoLastMove();
+	}
+}
+
+void UChessGameInstance::UndoLastMove()
+{
+	const UMove* Move = Moves.Pop();
+
+	//UE_LOG(LogTemp, Error, TEXT("Piece moved: %s, piece eaten: %s"), *Move->Piece->GetName(), Move->EatenPiece ? *Move->EatenPiece->GetName() : TEXT("None"));
+	
+	// Calc future location (in old position)
+	const FVector2D OldTilePosition = Move->Origin->GetGridPosition();
+	FVector const OldPosition = FVector(OldTilePosition.X * 120, OldTilePosition.Y * 120, Move->Piece->GetActorLocation().Z);
+	
+	// Move Actor
+	Move->Piece->SetActorLocation(OldPosition);
+	//Move->Origin->SetActorLocation(OldPosition);
+
+	// Set Origin Tile
+	Move->Piece->SetActualTile(Move->Origin);
+	Move->Origin->SetTileStatus((Moves.Num() % 2 == 0? 0 : 1), Occupied, false);
+	Move->Origin->SetPiece(Move->Piece);
+	
+	// Set Destination Tile
+	if (Move->Eat)
+	{
+		Move->EatenPiece->SelfRespawn();
+		Move->EatenPiece->SetActualTile(Move->Destination);
+		Move->Destination->SetPiece(Move->EatenPiece);
+		Move->Destination->SetTileStatus((Moves.Num() % 2 == 0? 1 : 0), Occupied, false);
+
+		Move->EatenPiece->CalculatePossibleMove(true);
+	}
+	else
+	{
+		Move->Destination->SetPiece(nullptr);
+		Move->Destination->SetTileStatus(-1, Empty, false);
+	}
+
+	Move->Piece->CalculatePossibleMove(true);
+	
 }

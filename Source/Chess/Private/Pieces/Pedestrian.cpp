@@ -73,5 +73,7 @@ int32 APedestrian::CalculatePossibleMove(const bool CheckScacco)
 		}
 	}
 
+	UE_LOG(LogTemp, Error, TEXT("Pedestrian: %s, Possible Move: %d"), *GetName() ,PossibleMove.Num());
+
 	return PossibleMove.Num();
 }

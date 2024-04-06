@@ -37,13 +37,15 @@ void AMinMaxPlayer::OnTurn()
 	int32 _MinMax = MinMax(0, false);
 	UE_LOG(LogTemp, Warning, TEXT("Best value: %d"), _MinMax);
 
+	NextMove->Piece->CalculatePossibleMove();
+	NextMove->Piece->ColorTilePossibleMove();
 	
 	FTimerHandle TimerHandle;
 	GetWorldTimerManager().SetTimer(TimerHandle, [this]()
 	{
 		MoveActorTo(NextMove->Destination, NextMove->Piece, NextMove->Eat);
 		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(NextMove);
-	}, 3.0f, false);
+	}, 5.0f, false);
 	
 	
 }
@@ -168,7 +170,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 				if (Min > Max)
 				{
 					Max = Min;
-					Move->Initialize(OldTile, Tile, Piece, B_IsOccupied);
+					Move->Initialize(OldTile, Tile, Piece, B_IsOccupied, PieceOnTile);
 				}
 				
 				++It2;
@@ -267,7 +269,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 			if (Min > Max)
 			{
 				Min = Max;
-				Move->Initialize(OldTile, Tile, Piece, B_IsOccupied);
+				Move->Initialize(OldTile, Tile, Piece, B_IsOccupied, PieceOnTile);
 			}
 				
 			++It2;

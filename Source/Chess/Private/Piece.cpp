@@ -38,7 +38,17 @@ void APiece::SetPlayerOwner(IPlayerInterface *Player)
 
 void APiece::SelfDestroy()
 {
-	Destroy();
+	//Destroy(); Choose to not destroy the piece to implement undo function in easy way
+	FVector FuturePosition = GetActorLocation();
+	FuturePosition.Z = -100;
+	this->SetActorLocation(FuturePosition);
+}
+
+void APiece::SelfRespawn()
+{
+	FVector FuturePosition = GetActorLocation();
+	FuturePosition.Z = 4.5;
+	this->SetActorLocation(FuturePosition);
 }
 
 void APiece::SetActualTile(ATile* Tile)

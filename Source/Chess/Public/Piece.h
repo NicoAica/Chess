@@ -30,7 +30,7 @@ protected:
 	IPlayerInterface *PlayerOwner;
 
 	// Keep in witch tile is
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	ATile* ActualTile = nullptr;
 
 public:
@@ -39,9 +39,10 @@ public:
 	TMap<FVector2D, ATile*> PossibleMove;
 
 	void SetPlayerOwner(IPlayerInterface *Player);
-
-	UFUNCTION()
+	
 	void SelfDestroy();
+
+	void SelfRespawn();
 
 	void SetActualTile(ATile* Tile);
 	

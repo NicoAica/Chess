@@ -61,5 +61,12 @@ public:
 		}
 	}
 
+	void PopLastMove() const
+	{
+		if (MoveList->GetChildrenCount() > 0)
+		{
+			MoveList->RemoveChildAt(MoveList->GetChildrenCount() - 1);
+		}
+	}
 	
 };

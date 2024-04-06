@@ -78,8 +78,9 @@ void AHumanPlayer::MoveActorTo(ATile* FutureTile)
 void AHumanPlayer::MoveActorTo(APiece* EvilPiece)
 {
 	ATile* Tmp = EvilPiece->GetActualTile();
-	MoveActorTo(Tmp);
 	EvilPiece->SelfDestroy();
+	UE_LOG(LogTemp, Error, TEXT("Mangiato il pezzo %s con proprietario %d"), *EvilPiece->GetName(), Tmp->GetOwner());
+	MoveActorTo(Tmp);
 }
 
 // Called every frame
@@ -92,7 +93,6 @@ void AHumanPlayer::Tick(float DeltaTime)
 void AHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void AHumanPlayer::OnTurn()
@@ -109,7 +109,6 @@ void AHumanPlayer::OnClick()
 
 	if (Hit.bBlockingHit && IsMyTurn)
 	{
-		
 		if (APiece* CurrPiece = Cast<APiece>(Hit.GetActor()))
 		{
 			// Check if click is on owner piece
@@ -132,7 +131,7 @@ void AHumanPlayer::OnClick()
 					if (FVector2D const CurrentPosition = FutureTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
 					{
 						UMove* Move = NewObject<UMove>();
-						Move->Initialize(SelectedPiece->GetActualTile(), FutureTile, SelectedPiece, true);
+						Move->Initialize(SelectedPiece->GetActualTile(), FutureTile, SelectedPiece, true, CurrPiece);
 						MoveActorTo(CurrPiece);
 						Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 					}

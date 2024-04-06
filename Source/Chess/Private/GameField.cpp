@@ -12,7 +12,6 @@
  // Sets default values
 AGameField::AGameField()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	TileSize = 120;
@@ -22,25 +21,17 @@ AGameField::AGameField()
  void AGameField::UndoMoves(const int32 MoveNumber)
  {
 	Cast<UChessGameInstance>(GetGameInstance())->UndoTillMove(MoveNumber);
- }
-/*
- void AGameField::ResetField()
- {
-	for (ATile* Obj : TileArray)
+
+	// Reset possible move (With undo we can't use the same possible move)
+	/*for (ATile* Tile : TileArray)
 	{
-		Obj->SetTileStatus(Not_Assigned, Empty);
-	}
-
-	 OnResetEvent.Broadcast();
-
-	AChessGameMode* GameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
-	GameMode->IsGameOver = false;
-	GameMode->MoveCounter = 0;
-	// respawn all pawns
-	GameMode->ChoosePlayerAndStartGame();
-	
+		if (Tile->GetPiece())
+		{
+			Tile->GetPiece()->CalculatePossibleMove();
+		}
+	}*/
  }
-*/
+
  void AGameField::GenerateField()
  {
 
