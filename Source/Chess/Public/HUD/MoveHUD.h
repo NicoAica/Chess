@@ -25,13 +25,33 @@ public:
 	UPROPERTY(EditAnywhere, Category="Move HUD Settings")
 	TSubclassOf<UMoveListEntry> MoveListEntryClass;
 
-	void Test(const FString& Move) const
+	void AddInList(const FString& Move) const
 	{
 		if (MoveListEntryClass)
 		{
 			UMoveListEntry* MoveListEntry = CreateWidget<UMoveListEntry>(GetWorld(), MoveListEntryClass);
 			MoveListEntry->MoveTextBlock->SetText(FText::FromString(Move));
 			MoveList->AddChild(MoveListEntry);
+		}
+	}
+
+	void AddCheckInLastMove() const
+	{
+		if (MoveList->GetChildrenCount() > 0)
+		{
+			const UMoveListEntry* MoveListEntry = Cast<UMoveListEntry>(MoveList->GetChildAt(MoveList->GetChildrenCount() - 1));
+			FString Tmp = MoveListEntry->MoveTextBlock->GetText().ToString();
+			MoveListEntry->MoveTextBlock->SetText(FText::FromString(Tmp + "+"));
+		}
+	}
+
+	void AddCheckMateInLastMove() const
+	{
+		if (MoveList->GetChildrenCount() > 0)
+		{
+			const UMoveListEntry* MoveListEntry = Cast<UMoveListEntry>(MoveList->GetChildAt(MoveList->GetChildrenCount() - 1));
+			FString Tmp = MoveListEntry->MoveTextBlock->GetText().ToString();
+			MoveListEntry->MoveTextBlock->SetText(FText::FromString(Tmp + "#"));
 		}
 	}
 

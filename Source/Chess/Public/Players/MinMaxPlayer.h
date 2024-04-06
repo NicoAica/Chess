@@ -23,7 +23,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	// Updated in MinMax, used in MoveActorTo
-	FMove* NextMove;
+	UPROPERTY(Transient)
+	UMove* NextMove;
 
 	// Difficulty of AI (MinMax Depth)
 	int32 Difficulty = 2;

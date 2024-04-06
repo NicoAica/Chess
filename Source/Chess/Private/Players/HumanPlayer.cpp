@@ -120,7 +120,7 @@ void AHumanPlayer::OnClick()
 				Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
 				CurrPiece->GetActualTile()->SelectedTileSetColor();
 				
-				int32 Test = CurrPiece->CalculatePossibleMove();
+				CurrPiece->CalculatePossibleMove();
 				
 				CurrPiece->ColorTilePossibleMove();
 			}
@@ -131,7 +131,8 @@ void AHumanPlayer::OnClick()
 					ATile* FutureTile = CurrPiece->GetActualTile();
 					if (FVector2D const CurrentPosition = FutureTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
 					{
-						FMove* Move = new FMove(SelectedPiece->GetActualTile(), FutureTile, SelectedPiece, false);
+						UMove* Move = NewObject<UMove>();
+						Move->Initialize(SelectedPiece->GetActualTile(), FutureTile, SelectedPiece, true);
 						MoveActorTo(CurrPiece);
 						Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 					}
@@ -144,8 +145,9 @@ void AHumanPlayer::OnClick()
 			{
 				if (FVector2D const CurrentPosition = CurrTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
 				{
+					UMove* Move = NewObject<UMove>();
+					Move->Initialize(SelectedPiece->GetActualTile(), CurrTile, SelectedPiece, false);
 					MoveActorTo(CurrTile);
-					FMove* Move = new FMove(SelectedPiece->GetActualTile(), CurrTile, SelectedPiece, false);
 					Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 				}
 			}

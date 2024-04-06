@@ -3,7 +3,7 @@
 
 #include "Supports/Move.h"
 
-FMove::FMove()
+UMove::UMove()
 {
 	Origin = nullptr;
 	Destination = nullptr;
@@ -11,14 +11,18 @@ FMove::FMove()
 	Eat = false;
 }
 
-FMove::FMove(ATile* Origin, ATile* Destination, APiece* Piece, bool Eat)
+UMove::UMove(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat)
 {
-	this->Origin = Origin;
-	this->Destination = Destination;
-	this->Piece = Piece;
-	this->Eat = Eat;
+	this->Origin = InOrigin;
+	this->Destination = InDestination;
+	this->Piece = InPiece;
+	this->Eat = InEat;
 }
 
-FMove::~FMove()
+void UMove::Initialize(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat)
 {
+	this->Origin = InOrigin;
+	this->Destination = InDestination;
+	this->Piece = InPiece;
+	this->Eat = InEat;
 }

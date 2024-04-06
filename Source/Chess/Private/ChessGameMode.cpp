@@ -65,15 +65,13 @@ int32 AChessGameMode::GetNextPlayer(int32 Player) const
 	return Player;
 }
 
-void AChessGameMode::TurnNextPlayer(FMove* Move)
+void AChessGameMode::TurnNextPlayer(UMove* Move)
 {
 	const int32 ActualPlayer = CurrentPlayer;
 	
 	MoveCounter += 1;
-
-	//MovesPanel->AddMove("Test");
 	
-	Cast<UChessGameInstance>(GetGameInstance())->SetLastMove(nullptr);
+	Cast<UChessGameInstance>(GetGameInstance())->AddMove(Move);
 	
 	CurrentPlayer = GetNextPlayer(CurrentPlayer);
 
@@ -83,9 +81,11 @@ void AChessGameMode::TurnNextPlayer(FMove* Move)
 		{
 			IsGameOver = true;
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Check Mate!"));
+			Cast<UChessGameInstance>(GetGameInstance())->AddResult(static_cast<bool>(CurrentPlayer));
 			return;
 		}
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Check!"));
+		Cast<UChessGameInstance>(GetGameInstance())->SetCheck();
 	}
 	else
 	{

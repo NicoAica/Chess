@@ -42,7 +42,7 @@ void AMinMaxPlayer::OnTurn()
 	GetWorldTimerManager().SetTimer(TimerHandle, [this]()
 	{
 		MoveActorTo(NextMove->Destination, NextMove->Piece, NextMove->Eat);
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(nullptr);
+		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(NextMove);
 	}, 3.0f, false);
 	
 	
@@ -88,7 +88,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 		// min value possible
 		int Max = -39;
 
-		FMove* Move = new FMove();
+		UMove* Move = NewObject<UMove>();
 
 		TMap<FVector2D, ATile*> WhitePieces;
 		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->GetYourTile(0, WhitePieces);
@@ -168,7 +168,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 				if (Min > Max)
 				{
 					Max = Min;
-					Move = new FMove(OldTile, Tile, Piece, B_IsOccupied);
+					Move->Initialize(OldTile, Tile, Piece, B_IsOccupied);
 				}
 				
 				++It2;
@@ -186,7 +186,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 	// max value possible
 	int Min = 39;
 
-	FMove* Move = new FMove();
+	UMove* Move = NewObject<UMove>();
 
 	TMap<FVector2D, ATile*> BlackPieces;
 	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->GetYourTile(1, BlackPieces);
@@ -267,7 +267,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 			if (Min > Max)
 			{
 				Min = Max;
-				Move = new FMove(OldTile, Tile, Piece, B_IsOccupied);
+				Move->Initialize(OldTile, Tile, Piece, B_IsOccupied);
 			}
 				
 			++It2;

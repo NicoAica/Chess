@@ -47,7 +47,7 @@ public:
 	int32 GetNextPlayer(int32 Player) const;
 
 	// called at the end of the game turn
-	void TurnNextPlayer(FMove* Move);
+	void TurnNextPlayer(UMove* Move);
 
 	void ChoosePlayerAndStartGame();
 };
