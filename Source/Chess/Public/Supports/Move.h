@@ -8,7 +8,7 @@
 /**
  * 
  */
-class CHESS_API FMove
+class CHESS_API FMove 
 {
 public:
 	FMove();

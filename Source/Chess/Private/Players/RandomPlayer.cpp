@@ -58,8 +58,8 @@ void ARandomPlayer::OnTurn()
 	GetWorldTimerManager().SetTimer(UnusedHandle, [this, FutureTile, Tile, GMode]()
 	{
 		MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0);
-		UE_LOG(LogTemp, Error, TEXT("Valore della scacchiera: %d"), GMode->GField->ValueOfChessBoard());
-		GMode->TurnNextPlayer();
+		//UE_LOG(LogTemp, Error, TEXT("Valore della scacchiera: %d"), GMode->GField->ValueOfChessBoard());
+		GMode->TurnNextPlayer(nullptr);
 	}, 0.1f, false);
 }
 

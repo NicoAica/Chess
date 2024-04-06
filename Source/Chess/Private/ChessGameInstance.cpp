@@ -3,3 +3,7 @@
 
 #include "ChessGameInstance.h"
 
+void UChessGameInstance::SetMoveHud(UMoveHUD* MoveHud)
+{
+	MoveHUD = MoveHud;
+}

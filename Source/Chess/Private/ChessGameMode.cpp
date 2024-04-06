@@ -2,6 +2,8 @@
 
 
 #include "ChessGameMode.h"
+
+#include "ChessGameInstance.h"
 #include "EngineUtils.h"
 #include "Players/HumanPlayer.h"
 #include "Players/MinMaxPlayer.h"
@@ -63,11 +65,16 @@ int32 AChessGameMode::GetNextPlayer(int32 Player) const
 	return Player;
 }
 
-void AChessGameMode::TurnNextPlayer()
+void AChessGameMode::TurnNextPlayer(FMove* Move)
 {
 	const int32 ActualPlayer = CurrentPlayer;
 	
 	MoveCounter += 1;
+
+	//MovesPanel->AddMove("Test");
+	
+	Cast<UChessGameInstance>(GetGameInstance())->SetLastMove(nullptr);
+	
 	CurrentPlayer = GetNextPlayer(CurrentPlayer);
 
 	if (GField->IsCheck(ActualPlayer))

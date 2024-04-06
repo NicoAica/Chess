@@ -42,7 +42,7 @@ void AMinMaxPlayer::OnTurn()
 	GetWorldTimerManager().SetTimer(TimerHandle, [this]()
 	{
 		MoveActorTo(NextMove->Destination, NextMove->Piece, NextMove->Eat);
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer();
+		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(nullptr);
 	}, 3.0f, false);
 	
 	
@@ -55,23 +55,7 @@ void AMinMaxPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool E
 		FutureTile->GetPiece()->SelfDestroy();
 	}
 	
-	/* Promote */
-	if (FutureTile->GetGridPosition().X == 0 && Cast<APedestrian>(SelectedPiece))
-	{
-		UE_LOG(LogTemp, Error, TEXT("Promozione"));
-		
-		// Remove reference
-		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-		SelectedPiece->GetActualTile()->SetPiece(nullptr);
-		
-		// Spawn queen
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, 1);
-
-		SelectedPiece->SelfDestroy();
-		
-	}
-	else
-	{
+	
 		// Calc future location
 		const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
 		FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
@@ -85,7 +69,7 @@ void AMinMaxPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool E
 		SelectedPiece->GetActualTile()->SetPiece(nullptr);
 		SelectedPiece->SetActualTile(FutureTile);
 		FutureTile->SetPiece(SelectedPiece);
-	}
+	
 	
 	// Remove possible move color
 	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
@@ -95,7 +79,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 {
 	if (Depth > Difficulty)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Value of chess board: %d"), Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->ValueOfChessBoard());
+		//UE_LOG(LogTemp, Warning, TEXT("Value of chess board: %d"), Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->ValueOfChessBoard());
 		return Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->ValueOfChessBoard();
 	}
 	
@@ -149,18 +133,17 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 				
 				//UE_LOG(LogTemp, Warning, TEXT("Value of chess board: %d"), ChessBoardValue);
 
-				
 				int32 Min;
 				if (Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheck(0))
 				{
 					if (Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->IsCheckMate(1))
 					{
-						Max = 50;
+						Min = 50;
 					}
 					else
 					{
-						// Assigned to check 4 points
-						Max = MinMax(Depth + 1, true) + 4;
+						// Assigned to check 1 points
+						Min = MinMax(Depth + 1, true) + 1;
 					}
 				}
 				else
@@ -257,12 +240,12 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 				}
 				else
 				{
-					// Assigned to check 4 points
+					// Assigned to check 1 points
 					Max = MinMax(Depth + 1, true);
-					UE_LOG(LogTemp, Warning, TEXT("Passo a volte qui dentro, Max: %d"), Max);
-					Max -= 4;
+					//UE_LOG(LogTemp, Warning, TEXT("Passo a volte qui dentro, Max: %d"), Max);
+					Max -= 1;
 				}
-				UE_LOG(LogTemp, Warning, TEXT("Passo a volte qui, Max: %d"), Max);
+				//UE_LOG(LogTemp, Warning, TEXT("Passo a volte qui, Max: %d"), Max);
 			}
 			else
 			{

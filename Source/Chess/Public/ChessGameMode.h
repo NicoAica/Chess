@@ -6,6 +6,7 @@
 #include "GameField.h"
 #include "PlayerInterface.h"
 #include "GameFramework/GameModeBase.h"
+#include "Supports/Move.h"
 #include "ChessGameMode.generated.h"
 
 /**
@@ -46,7 +47,7 @@ public:
 	int32 GetNextPlayer(int32 Player) const;
 
 	// called at the end of the game turn
-	void TurnNextPlayer();
+	void TurnNextPlayer(FMove* Move);
 
 	void ChoosePlayerAndStartGame();
 };

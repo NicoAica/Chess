@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HUD/MoveHUD.h"
 #include "ChessPlayerController.generated.h"
 
 /**
@@ -23,12 +24,15 @@ class CHESS_API AChessPlayerController : public APlayerController
 
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* InputAction;
-
+	
 	void ClickOnGrid();
 
 protected:
 
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
-	
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="User Interface")
+	UMoveHUD* MoveHUD;
 };

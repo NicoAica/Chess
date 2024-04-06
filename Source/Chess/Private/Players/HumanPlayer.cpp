@@ -131,8 +131,9 @@ void AHumanPlayer::OnClick()
 					ATile* FutureTile = CurrPiece->GetActualTile();
 					if (FVector2D const CurrentPosition = FutureTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
 					{
+						FMove* Move = new FMove(SelectedPiece->GetActualTile(), FutureTile, SelectedPiece, false);
 						MoveActorTo(CurrPiece);
-						Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer();
+						Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 					}
 				}
 			}
@@ -144,7 +145,8 @@ void AHumanPlayer::OnClick()
 				if (FVector2D const CurrentPosition = CurrTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
 				{
 					MoveActorTo(CurrTile);
-					Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer();
+					FMove* Move = new FMove(SelectedPiece->GetActualTile(), CurrTile, SelectedPiece, false);
+					Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 				}
 			}
 		}

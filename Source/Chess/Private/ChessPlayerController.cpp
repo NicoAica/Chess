@@ -3,6 +3,7 @@
 
 #include "ChessPlayerController.h"
 
+#include "ChessGameInstance.h"
 #include "Players/HumanPlayer.h"
 
 AChessPlayerController::AChessPlayerController()
@@ -30,7 +31,9 @@ void AChessPlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(Context, 0);
 	}
-	
+
+	// Set the MoveHUD (default HUD) in the ChessGameInstance
+	Cast<UChessGameInstance>(GetGameInstance())->SetMoveHud(MoveHUD);
 }
 
 void AChessPlayerController::SetupInputComponent()
