@@ -27,7 +27,7 @@ protected:
 	UMove* NextMove;
 
 	// Difficulty of AI (MinMax Depth)
-	int32 Difficulty = 2;
+	int32 Difficulty = 3;
 	
 public:	
 
@@ -35,10 +35,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void OnTurn() override;
-
-	void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat) const;
-
-	int32 MinMax(int Depth, bool IsMaximizingPlayer);
+	
+	int32 MinMax(int Depth, int Alpha, int Beta, bool IsMaximizingPlayer);
 
 };
 

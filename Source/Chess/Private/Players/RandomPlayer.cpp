@@ -10,21 +10,18 @@ ARandomPlayer::ARandomPlayer()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
 // Called when the game starts or when spawned
 void ARandomPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called to bind functionality to input
 void ARandomPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void ARandomPlayer::OnTurn()
@@ -86,38 +83,3 @@ void ARandomPlayer::OnTurn()
 		GMode->TurnNextPlayer(Move);
 	}, 0.5f, false);
 }
-
-/*
-void ARandomPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool const Eat) const
-{
-	if (Eat)
-	{
-		FutureTile->GetPiece()->SelfDestroy();
-	}
-
-	if (FutureTile->GetGridPosition().X == 0 && Cast<APedestrian>(SelectedPiece))
-	{
-		SelectedPiece->SelfDestroy();
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, 1);
-		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-		SelectedPiece->GetActualTile()->SetPiece(nullptr);
-	}
-	else
-	{
-		// Calc future location
-		const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
-		FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
-	
-		// Move Actor
-		SelectedPiece->SetActorLocation(FuturePosition);
-
-		// Change Tile Info
-		FutureTile->SetTileStatus(1, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
-		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-		SelectedPiece->GetActualTile()->SetPiece(nullptr);
-		SelectedPiece->SetActualTile(FutureTile);
-		FutureTile->SetPiece(SelectedPiece);
-	}
-	
-}
-*/

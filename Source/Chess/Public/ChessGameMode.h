@@ -18,21 +18,19 @@ class CHESS_API AChessGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	
 	// tracks if the game is over
 	bool IsGameOver;
+	
 	// array of player interfaces
 	TArray<IPlayerInterface*> Players;
+
+	// tracks the current player index
 	int32 CurrentPlayer;
-	// tracks the number of moves in order to signal a drawn game
-	int32 MoveCounter;
 
 	// TSubclassOf is a template class that provides UClass type safety.
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AGameField> GameFieldClass;
-
-	// field size
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 FieldSize;
 
 	// reference to a GameField object
 	UPROPERTY(VisibleAnywhere)
@@ -49,5 +47,6 @@ public:
 	// called at the end of the game turn
 	void TurnNextPlayer(UMove* Move);
 
+	// called when the game begins
 	void ChoosePlayerAndStartGame();
 };

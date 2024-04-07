@@ -77,12 +77,3 @@ void ATile::PossibleMoveColor()
 {
 	StaticMeshComponent->SetMaterial(0, MaterialInstanceTileLightYellow);
 }
-
-// Called every frame
-/*
-void ATile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-*/

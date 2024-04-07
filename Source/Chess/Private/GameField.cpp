@@ -45,16 +45,6 @@ void AGameField::UndoMoves(const int32 MoveNumber)
 	{
 		Cast<UChessGameInstance>(GetGameInstance())->UndoTillMove(MoveNumber);
 	}
-
-
-	// Reset possible move (With undo we can't use the same possible move)
-	/*for (ATile* Tile : TileArray)
-	{
-		if (Tile->GetPiece())
-		{
-			Tile->GetPiece()->CalculatePossibleMove();
-		}
-	}*/
 }
 
 void AGameField::GenerateField()
@@ -75,10 +65,10 @@ void AGameField::GenerateField()
 		}
 	}
 	SpawnPedestrianOnTiles();
-	//SpawnQueensOnTile();
-	//SpawnKnightsOnTile();
-	//SpawnRooksOnTile();
-	//SpawnBishopsOnTile();
+	SpawnQueensOnTile();
+	SpawnKnightsOnTile();
+	SpawnRooksOnTile();
+	SpawnBishopsOnTile();
 	SpawnKingsOnTile();
 
 	DefaultTileColor();
@@ -146,9 +136,9 @@ void AGameField::SpawnPedestrianOnTiles()
 		Obj->SetPiece(Pedestrian);
 
 		// Black Pedestrian
-		Location = GetRelativeLocationByXYPosition(3, i);
+		Location = GetRelativeLocationByXYPosition(6, i);
 		Location.Z = 4.5;
-		Obj = *TileMap.Find(FVector2D(3, i));
+		Obj = *TileMap.Find(FVector2D(6, i));
 		Pedestrian = GetWorld()->SpawnActor<APedestrian>(PedestrianClass, Location,
 		                                                 FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
 		Pedestrian->StaticMeshComponent->SetMaterial(0, MaterialInstancePedestrianBlack);
@@ -166,19 +156,19 @@ void AGameField::SpawnQueensOnTile()
 	// White Queen
 	FVector Location = GetRelativeLocationByXYPosition(0, 3);
 	Location.Z = 4.5;
-	/*ATile* Obj = *TileMap.Find(FVector2D(0, 3));
+	ATile* Obj = *TileMap.Find(FVector2D(0, 3));
 	AQueen* Queen = GetWorld()->SpawnActor<AQueen>(QueenClass, Location, FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
 	Queen->SetActualTile(Obj);
 	Queen->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenWhite);
 	Queen->SetActorScale3D(FVector(TileScale, TileScale, 1));
 	Obj->SetTileStatus(0, Occupied);
 	Obj->SetPiece(Queen);
-*/
+
 	// Black Queen
 	Location = GetRelativeLocationByXYPosition(7, 3);
 	Location.Z = 4.5;
-	ATile* Obj = *TileMap.Find(FVector2D(7, 3));
-	AQueen* Queen = GetWorld()->SpawnActor<AQueen>(QueenClass, Location,
+	Obj = *TileMap.Find(FVector2D(7, 3));
+	Queen = GetWorld()->SpawnActor<AQueen>(QueenClass, Location,
 	                                               FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
 	Queen->SetActualTile(Obj);
 	Queen->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenBlack);
@@ -552,63 +542,12 @@ FVector2D AGameField::GetXYPositionByRelativeLocation(const FVector& Location)
 	return FVector2D(x, y);
 }
 
-bool AGameField::IsWinPosition(const FVector2D Position)
-{
-	return false; // TODO
-}
-
-bool AGameField::IsValidPosition(const FVector2D Begin, const FVector2D End) const
-{
-	return false; // TODO
-}
-
-TArray<int32> AGameField::GetLine(const FVector2D Begin, const FVector2D End)
-{
-	return TArray<int32>();
-}
-
-bool AGameField::AllEqual(const TArray<int32>& Array) const
-{
-	return false; // TODO
-}
 
 // Called when the game starts or when spawned
 void AGameField::BeginPlay()
 {
 	Super::BeginPlay();
 	GenerateField();
-}
-
-int32 AGameField::GetNumberOfBlackPiece()
-{
-	int32 Count = 0;
-	for (ATile* Tile : TileArray)
-	{
-		if (Tile->GetOwner() == 1)
-		{
-			Count++;
-		}
-	}
-	return Count;
-}
-
-ATile* AGameField::GetTileOfBlackPiece(const int32 N)
-{
-	int32 Count = 0;
-	ATile* Tmp = nullptr;
-	for (ATile* Tile : TileArray)
-	{
-		if (Tile->GetOwner() == 1)
-		{
-			Tmp = Tile;
-			Count++;
-			if (Count > N)
-			{
-				return Tmp;
-			}
-		}
-	}
-	return Tmp;
 }
 
 // Called every frame

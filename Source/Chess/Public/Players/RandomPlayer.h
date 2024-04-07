@@ -27,7 +27,5 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void OnTurn() override;
-
-	//void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat) const;
-
+	
 };

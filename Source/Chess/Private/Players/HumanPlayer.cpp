@@ -20,9 +20,6 @@ AHumanPlayer::AHumanPlayer()
 
 	// Set camera as root component
 	SetRootComponent(Camera);
-
-	PlayerNumber = -1;
-	
 }
 
 // Called when the game starts or when spawned
@@ -30,56 +27,6 @@ void AHumanPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-void AHumanPlayer::MoveActorTo(ATile* FutureTile)
-{
-
-	/* Promote */
-	if (FutureTile->GetGridPosition().X == 7 && Cast<APedestrian>(SelectedPiece))
-	{
-		
-		// Remove reference
-		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-		SelectedPiece->GetActualTile()->SetPiece(nullptr);
-		
-		// Spawn queen
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, 0);
-
-		SelectedPiece->SelfDestroy();
-		
-	}
-	else
-	{
-		// Calc future location
-		const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
-		FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
-		
-		// Move Actor
-		SelectedPiece->SetActorLocation(FuturePosition);
-
-		// Change Tile Info
-		FutureTile->SetTileStatus(0, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
-		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-		SelectedPiece->GetActualTile()->SetPiece(nullptr);
-		SelectedPiece->SetActualTile(FutureTile);
-		FutureTile->SetPiece(SelectedPiece);
-	}
-
-	// Remove possible move color
-	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
-	
-	// Initialize variable for next time
-	SelectedPiece = nullptr;
-	IsMyTurn = false;
-	
-}
-
-void AHumanPlayer::MoveActorTo(APiece* EvilPiece)
-{
-	ATile* Tmp = EvilPiece->GetActualTile();
-	EvilPiece->SelfDestroy();
-	MoveActorTo(Tmp);
 }
 
 // Called every frame
@@ -144,7 +91,6 @@ void AHumanPlayer::OnClick()
 							Move->SetPromotedPiece(FutureTile->GetPiece());
 						}
 						
-						//MoveActorTo(CurrPiece);
 						Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 					}
 				}

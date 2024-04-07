@@ -23,9 +23,6 @@ void AChessGameMode::BeginPlay()
 
 	IsGameOver = false;
 
-	// TODO Edit
-	MoveCounter = 0;
-
 	AHumanPlayer* HumanPlayer = Cast<AHumanPlayer>(*TActorIterator<AHumanPlayer>(GetWorld()));
 
 	if (GameFieldClass != nullptr)
@@ -72,8 +69,6 @@ void AChessGameMode::TurnNextPlayer(UMove* Move)
 	
 	const int32 ActualPlayer = CurrentPlayer;
 	
-	MoveCounter += 1;
-	
 	Cast<UChessGameInstance>(GetGameInstance())->AddMove(Move);
 	
 	CurrentPlayer = GetNextPlayer(CurrentPlayer);
@@ -112,7 +107,7 @@ void AChessGameMode::ChoosePlayerAndStartGame()
 	{
 		Players[i]->PlayerNumber = i;
 	}
-	MoveCounter += 1;
+
 
 	for (int32 i = 0; i < Players.Num(); i++)
 	{

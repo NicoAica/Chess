@@ -24,17 +24,20 @@ public:
 	// Sets default values for this actor's properties
 	AGameField();
 	
-	//virtual void OnConstruction(const FTransform& Transform) override;
-
+	// This method is called from HUD to undo the moves
 	UFUNCTION(BlueprintCallable)
 	void UndoMoves(int32 MoveNumber);
 
+	// Uso this method to span tiles and pieces
 	void GenerateField();
 
+	// Use this method to get position of the hit
 	static FVector2D GetPosition(const FHitResult& Hit);
 
+	// Return the tile array
 	TArray<ATile*>& GetTileArray();
 
+	// Return the tile map
 	TMap<FVector2D, ATile*>& GetTileMap();
 
 	// Return only the tiles that belong to the player
@@ -55,35 +58,19 @@ public:
 	// Use this method to calculate the value of the chess board
 	int32 ValueOfChessBoard();
 
+	// Use this method to calculate the value of the piece
 	int32 ValueOfPiece(const APiece* Piece);
-
+	
 	FVector GetRelativeLocationByXYPosition(const int32 InX, const int32 InY) const;
 
 	static FVector2D GetXYPositionByRelativeLocation(const FVector& Location);
 
-	static bool IsWinPosition(const FVector2D Position);
-
-	inline bool IsValidPosition(const FVector2D Begin, const FVector2D End) const;
-
-	TArray<int32> GetLine(const FVector2D Begin, const FVector2D End);
-	
-	bool AllEqual(const TArray<int32>& Array) const;
-
 	// Use this method to color the tile spawned to default
 	void DefaultTileColor();
 
-	// Propriety assigned in blueprint
-	UPROPERTY(BlueprintAssignable)
-	FOnReset OnResetEvent;
-
+	// Map of the tiles
 	UPROPERTY(Transient)
 	TMap<FVector2D, ATile*> TileMap;
-
-	// Return the number of black pieces
-	int32 GetNumberOfBlackPiece();
-
-	// Return the N-th cell with a black piece.
-	ATile* GetTileOfBlackPiece(int32 N);
 
 	/* Spawn Pieces */
 	void SpawnPedestrianOnTiles();
@@ -100,14 +87,7 @@ protected:
 	UPROPERTY(Transient)
 	TArray<ATile*> TileArray;
 
-	static const int32 Not_Assigned = -1;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	const int32 Size = 8;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	//int32 WinSize;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float TileSize;
@@ -175,6 +155,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
+
+	// Use this method to move the actor to the future tile
 	void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat, const int32 Player) const;
 };

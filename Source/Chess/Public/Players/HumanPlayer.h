@@ -14,6 +14,7 @@ UCLASS()
 class CHESS_API AHumanPlayer : public APawn, public IPlayerInterface
 {
 	GENERATED_BODY()
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -21,15 +22,9 @@ protected:
 	// Keeps track turn
 	bool IsMyTurn = false;
 
-	// Flag to keep if is the first or second click on tile
-	bool IsFirstClick = true;
-
-	// Keep the selected piece (Uso UProp to avoid Garbage Collection problem)
+	// Keep the selected piece (Use UProp to avoid Garbage Collection problem)
 	UPROPERTY()
 	APiece *SelectedPiece = nullptr;
-
-	void MoveActorTo(ATile* FutureTile);
-	void MoveActorTo(APiece* EvilPiece);
 
 public:	
 	// Called every frame
@@ -39,7 +34,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Override OnTurn function
-	void OnTurn() override;
+	virtual void OnTurn() override;
 
 	UFUNCTION()
 	void OnClick();
@@ -48,8 +43,7 @@ public:
 	AHumanPlayer();
 
 	// Human camera
+	UPROPERTY()
 	UCameraComponent *Camera;
-
-private:
-	int PlayerNumber;
+	
 };

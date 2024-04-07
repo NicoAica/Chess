@@ -34,7 +34,7 @@ void AMinMaxPlayer::OnTurn()
 	auto const GField = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField;
 
 	
-	int32 _MinMax = MinMax(0, false);
+	int32 _MinMax = MinMax(0, -1000, 1000, false);
 	UE_LOG(LogTemp, Warning, TEXT("Best value: %d"), _MinMax);
 
 	NextMove->Piece->CalculatePossibleMove();
@@ -63,7 +63,7 @@ void AMinMaxPlayer::OnTurn()
 	
 }
 
-int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
+int32 AMinMaxPlayer::MinMax(int Depth, int Alpha, int Beta, bool IsMaximizingPlayer)
 {
 	if (Depth > Difficulty)
 	{
@@ -131,12 +131,12 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 					else
 					{
 						// Assigned to check 1 points
-						Min = MinMax(Depth + 1, true) + 1;
+						Min = MinMax(Depth + 1, Alpha, Beta, true) + 1;
 					}
 				}
 				else
 				{
-					Min = MinMax(Depth + 1, false);
+					Min = MinMax(Depth + 1, Alpha, Beta,false);
 				}
 				
 				
@@ -158,7 +158,11 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 					Max = Min;
 					Move->Initialize(OldTile, Tile, Piece, B_IsOccupied, PieceOnTile);
 				}
-				
+				Alpha = FMath::Max(Alpha, Max);
+				if (Beta <= Alpha)
+				{
+					break; // Beta cut-off
+				}		
 				++It2;
 			}
 			++It;
@@ -229,7 +233,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 				else
 				{
 					// Assigned to check 1 points
-					Max = MinMax(Depth + 1, true);
+					Max = MinMax(Depth + 1, Alpha, Beta,true);
 					//UE_LOG(LogTemp, Warning, TEXT("Passo a volte qui dentro, Max: %d"), Max);
 					Max -= 1;
 				}
@@ -237,7 +241,7 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 			}
 			else
 			{
-				Max = MinMax(Depth + 1, true);
+				Max = MinMax(Depth + 1, Alpha, Beta, true);
 			}
 			
 			OldTile->SetTileStatus(Tile->GetOwner(), Occupied, Tile->B_IsKingTile);
@@ -257,7 +261,11 @@ int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)
 				Min = Max;
 				Move->Initialize(OldTile, Tile, Piece, B_IsOccupied, PieceOnTile);
 			}
-				
+			Beta = FMath::Min(Beta, Min);
+			if (Beta <= Alpha)
+			{
+				break; // Alpha cut-off
+			}	
 			++It2;
 		}
 		++It;
