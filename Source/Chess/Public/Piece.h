@@ -41,6 +41,8 @@ public:
 	void SetPlayerOwner(IPlayerInterface *Player);
 	
 	void SelfDestroy();
+	
+	void HardDestroy();
 
 	void SelfRespawn();
 

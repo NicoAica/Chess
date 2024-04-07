@@ -43,7 +43,7 @@ void UMove::SetPromotedPiece(APiece* InPromotedPiece)
 
 void UMove::SetPieceFromPromotedPiece()
 {
-	Piece->SelfDestroy(); // Hard Destroy
+	Piece->HardDestroy();
 	Piece = PromotedPiece;
 	
 }

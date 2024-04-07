@@ -617,17 +617,17 @@ void AGameField::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AGameField::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool const Eat) const
+void AGameField::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool const Eat, const int32 Player) const
 {
 	if (Eat)
 	{
 		FutureTile->GetPiece()->SelfDestroy();
 	}
 
-	if (FutureTile->GetGridPosition().X == 0 && Cast<APedestrian>(SelectedPiece))
+	if (FutureTile->GetGridPosition().X == (Player == 1 ? 0 : 7) && Cast<APedestrian>(SelectedPiece))
 	{
 		SelectedPiece->SelfDestroy();
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, 1);
+		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, Player);
 		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
 		SelectedPiece->GetActualTile()->SetPiece(nullptr);
 	}
@@ -641,7 +641,7 @@ void AGameField::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool cons
 		SelectedPiece->SetActorLocation(FuturePosition);
 
 		// Change Tile Info
-		FutureTile->SetTileStatus(1, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
+		FutureTile->SetTileStatus(Player, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
 		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
 		SelectedPiece->GetActualTile()->SetPiece(nullptr);
 		SelectedPiece->SetActualTile(FutureTile);

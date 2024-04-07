@@ -50,7 +50,7 @@ void AMinMaxPlayer::OnTurn()
 
 		bool const B_IsPromotionMove = NextMove->Destination->GetGridPosition().X == 0 && Cast<APedestrian>(NextMove->Piece);	
 		
-		GMode->GField->MoveActorTo(NextMove->Destination, NextMove->Piece, NextMove->Eat);
+		GMode->GField->MoveActorTo(NextMove->Destination, NextMove->Piece, NextMove->Eat, 1);
 		
 		if (B_IsPromotionMove)
 		{

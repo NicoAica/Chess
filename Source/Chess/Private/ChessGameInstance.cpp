@@ -149,6 +149,7 @@ void UChessGameInstance::UndoLastMove()
 	// Set Original Piece (Promote Exception)
 	if (Move->PromotedPiece != nullptr)
 	{
+		UE_LOG(LogTemp, Error, TEXT("Promoted Piece"));
 		Move->SetPieceFromPromotedPiece();
 	}
 

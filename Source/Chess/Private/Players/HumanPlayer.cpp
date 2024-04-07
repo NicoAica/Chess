@@ -104,6 +104,8 @@ void AHumanPlayer::OnClick()
 {
 	FHitResult Hit = FHitResult(ForceInit);
 
+	auto GMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+
 	GetWorld()->GetFirstPlayerController()->GetHitResultUnderCursor(ECC_Pawn, true, Hit);
 
 	if (Hit.bBlockingHit && IsMyTurn)
@@ -129,9 +131,20 @@ void AHumanPlayer::OnClick()
 					ATile* FutureTile = CurrPiece->GetActualTile();
 					if (FVector2D const CurrentPosition = FutureTile->GetGridPosition(); SelectedPiece->CanGoTo(CurrentPosition))
 					{
+						
 						UMove* Move = NewObject<UMove>();
 						Move->Initialize(SelectedPiece->GetActualTile(), FutureTile, SelectedPiece, true, CurrPiece);
-						MoveActorTo(CurrPiece);
+
+						bool const B_IsPromotionMove = FutureTile->GetGridPosition().X == 7 && Cast<APedestrian>(SelectedPiece);	
+
+						GMode->GField->MoveActorTo(FutureTile, SelectedPiece, true, 0);
+
+						if (B_IsPromotionMove)
+						{
+							Move->SetPromotedPiece(FutureTile->GetPiece());
+						}
+						
+						//MoveActorTo(CurrPiece);
 						Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 					}
 				}
@@ -145,7 +158,16 @@ void AHumanPlayer::OnClick()
 				{
 					UMove* Move = NewObject<UMove>();
 					Move->Initialize(SelectedPiece->GetActualTile(), CurrTile, SelectedPiece, false);
-					MoveActorTo(CurrTile);
+
+					bool const B_IsPromotionMove = CurrTile->GetGridPosition().X == 7 && Cast<APedestrian>(SelectedPiece);	
+					
+					GMode->GField->MoveActorTo(CurrTile, SelectedPiece, false, 0);
+					
+					if (B_IsPromotionMove)
+					{
+						Move->SetPromotedPiece(CurrTile->GetPiece());
+					}
+
 					Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 				}
 			}

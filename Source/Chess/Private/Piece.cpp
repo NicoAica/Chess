@@ -44,6 +44,12 @@ void APiece::SelfDestroy()
 	this->SetActorLocation(FuturePosition);
 }
 
+void APiece::HardDestroy()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Destroy"));
+	Destroy();
+}
+
 void APiece::SelfRespawn()
 {
 	if (this->IsValidLowLevel()) {

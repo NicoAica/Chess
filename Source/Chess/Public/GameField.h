@@ -176,5 +176,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat) const;
+	void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat, const int32 Player) const;
 };

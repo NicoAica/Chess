@@ -76,7 +76,7 @@ void ARandomPlayer::OnTurn()
 
 		bool const B_IsPromotionMove = FutureTile->GetGridPosition().X == 0 && Cast<APedestrian>(Tile->GetPiece());	
 		
-		GMode->GField->MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0);
+		GMode->GField->MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0, 1);
 		
 		if (B_IsPromotionMove)
 		{
