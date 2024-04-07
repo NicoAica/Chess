@@ -39,42 +39,28 @@ void AMinMaxPlayer::OnTurn()
 
 	NextMove->Piece->CalculatePossibleMove();
 	NextMove->Piece->ColorTilePossibleMove();
+
+	auto GMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
 	
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, [this]()
+	GetWorldTimerManager().SetTimer(TimerHandle, [this, GMode]()
 	{
-		MoveActorTo(NextMove->Destination, NextMove->Piece, NextMove->Eat);
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(NextMove);
-	}, 5.0f, false);
-	
-	
-}
+		UMove *Move = NewObject<UMove>();
+		Move->Initialize(NextMove->Origin, NextMove->Destination, NextMove->Piece, NextMove->Eat, NextMove->EatenPiece);
 
-void AMinMaxPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat) const
-{
-	if (Eat)
-	{
-		FutureTile->GetPiece()->SelfDestroy();
-	}
-	
-	
-		// Calc future location
-		const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
-		FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
-	
-		// Move Actor
-		SelectedPiece->SetActorLocation(FuturePosition);
+		bool const B_IsPromotionMove = NextMove->Destination->GetGridPosition().X == 0 && Cast<APedestrian>(NextMove->Piece);	
+		
+		GMode->GField->MoveActorTo(NextMove->Destination, NextMove->Piece, NextMove->Eat);
+		
+		if (B_IsPromotionMove)
+		{
+			Move->SetPromotedPiece(NextMove->Destination->GetPiece());
+		}
+		
+		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(Move);
 
-		// Change Tile Info
-		FutureTile->SetTileStatus(1, Occupied, SelectedPiece->GetActualTile()->B_IsKingTile);
-		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
-		SelectedPiece->GetActualTile()->SetPiece(nullptr);
-		SelectedPiece->SetActualTile(FutureTile);
-		FutureTile->SetPiece(SelectedPiece);
+	}, 1.0f, false);
 	
-	
-	// Remove possible move color
-	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
 }
 
 int32 AMinMaxPlayer::MinMax(int Depth, bool IsMaximizingPlayer)

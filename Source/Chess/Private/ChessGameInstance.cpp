@@ -65,9 +65,9 @@ void UChessGameInstance::SetMoveHud(UMoveHUD* MoveHud)
 	MoveHUD = MoveHud;
 }
 
-void UChessGameInstance::SetErrorMessage() const
+void UChessGameInstance::SetErrorMessage(const FString& Message) const
 {
-	MoveHUD->SetErrorMessage();
+	MoveHUD->SetErrorMessage(Message);
 }
 
 void UChessGameInstance::HiddenErrorMessage() const
@@ -135,25 +135,29 @@ void UChessGameInstance::UndoTillMove(const int32 MoveIndex)
 		MoveHUD->PopLastMove();
 		UndoLastMove();
 	}
+	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
 }
 
 void UChessGameInstance::UndoLastMove()
 {
-	const UMove* Move = Moves.Pop();
-
-	//UE_LOG(LogTemp, Error, TEXT("Piece moved: %s, piece eaten: %s"), *Move->Piece->GetName(), Move->EatenPiece ? *Move->EatenPiece->GetName() : TEXT("None"));
+	UMove* Move = Moves.Pop();
 	
 	// Calc future location (in old position)
 	const FVector2D OldTilePosition = Move->Origin->GetGridPosition();
 	FVector const OldPosition = FVector(OldTilePosition.X * 120, OldTilePosition.Y * 120, Move->Piece->GetActorLocation().Z);
 	
+	// Set Original Piece (Promote Exception)
+	if (Move->PromotedPiece != nullptr)
+	{
+		Move->SetPieceFromPromotedPiece();
+	}
+
 	// Move Actor
 	Move->Piece->SetActorLocation(OldPosition);
-	//Move->Origin->SetActorLocation(OldPosition);
 
 	// Set Origin Tile
 	Move->Piece->SetActualTile(Move->Origin);
-	Move->Origin->SetTileStatus((Moves.Num() % 2 == 0? 0 : 1), Occupied, false);
+	Move->Origin->SetTileStatus((Moves.Num() % 2 == 0? 0 : 1), Occupied, Move->Destination->B_IsKingTile);
 	Move->Origin->SetPiece(Move->Piece);
 	
 	// Set Destination Tile

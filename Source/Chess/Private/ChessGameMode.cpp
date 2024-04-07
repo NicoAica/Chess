@@ -67,6 +67,9 @@ int32 AChessGameMode::GetNextPlayer(int32 Player) const
 
 void AChessGameMode::TurnNextPlayer(UMove* Move)
 {
+	// Remove possible move color
+	GField->DefaultTileColor();
+	
 	const int32 ActualPlayer = CurrentPlayer;
 	
 	MoveCounter += 1;

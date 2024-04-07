@@ -41,7 +41,7 @@ public:
 
 	void SetMoveHud(UMoveHUD* MoveHud);
 
-	void SetErrorMessage() const;
+	void SetErrorMessage(const FString& Message) const;
 
 	void HiddenErrorMessage() const;
 	

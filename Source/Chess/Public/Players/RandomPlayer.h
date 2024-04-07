@@ -28,6 +28,6 @@ public:
 
 	virtual void OnTurn() override;
 
-	void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat) const;
+	//void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat) const;
 
 };

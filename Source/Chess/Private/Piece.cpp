@@ -46,9 +46,13 @@ void APiece::SelfDestroy()
 
 void APiece::SelfRespawn()
 {
-	FVector FuturePosition = GetActorLocation();
-	FuturePosition.Z = 4.5;
-	this->SetActorLocation(FuturePosition);
+	if (this->IsValidLowLevel()) {
+		FVector FuturePosition = GetActorLocation();
+		FuturePosition.Z = 4.5;
+		this->SetActorLocation(FuturePosition);
+	} else {
+		UE_LOG(LogTemp, Warning, TEXT("Actor is not valid."));
+	}
 }
 
 void APiece::SetActualTile(ATile* Tile)

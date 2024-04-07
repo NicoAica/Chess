@@ -33,20 +33,34 @@ void ARandomPlayer::OnTurn()
 	auto const GMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
 	auto const GField = GMode->GField;
 
-	ATile* Tile;
-	int32 Test = 0;
+	ATile* Tile = nullptr;
+	TMap<FVector2D, ATile*> BlackTileMap;
+	GField->GetYourTile(1, BlackTileMap);
 	
+	bool B_HasAvailableMove = false;
+
 	do
 	{
-		Test++;
-		Tile = GField->GetTileOfBlackPiece(rand() % GField->GetNumberOfBlackPiece());
-		if (Test > 150)
+		auto It = BlackTileMap.CreateConstIterator();
+		const int32 Rand = rand() % BlackTileMap.Num();
+		int32 i = 0;
+
+		while (It && i < Rand)
 		{
-			// TODO implement patta
-			return;
+			++It;
+			++i;
 		}
-	}
-	while (!Tile->GetPiece()->CalculatePossibleMove());
+		
+		if (It.Value()->GetPiece()->CalculatePossibleMove(true))
+		{
+			B_HasAvailableMove = true;
+			Tile = It.Value();
+		}
+		else
+		{
+			BlackTileMap.Remove(It.Key());
+		}
+	} while (!B_HasAvailableMove);
 	
 	Tile->GetPiece()->ColorTilePossibleMove();
 	Tile->SelectedTileSetColor();
@@ -58,35 +72,35 @@ void ARandomPlayer::OnTurn()
 	GetWorldTimerManager().SetTimer(UnusedHandle, [this, FutureTile, Tile, GMode]()
 	{
 		UMove *Move = NewObject<UMove>();
-		Move->Initialize(Tile, FutureTile, Tile->GetPiece(), FutureTile->GetPiece() == nullptr, FutureTile->GetPiece());
-		MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0);
-		//UE_LOG(LogTemp, Error, TEXT("Valore della scacchiera: %d"), GMode->GField->ValueOfChessBoard());
+		Move->Initialize(Tile, FutureTile, Tile->GetPiece(), FutureTile->GetPiece() != nullptr, FutureTile->GetPiece());;
+
+		bool const B_IsPromotionMove = FutureTile->GetGridPosition().X == 0 && Cast<APedestrian>(Tile->GetPiece());	
+		
+		GMode->GField->MoveActorTo(FutureTile, Tile->GetPiece(), FutureTile->GetOwner() == 0);
+		
+		if (B_IsPromotionMove)
+		{
+			Move->SetPromotedPiece(FutureTile->GetPiece());
+		}
+		
 		GMode->TurnNextPlayer(Move);
-	}, 0.1f, false);
+	}, 0.5f, false);
 }
 
+/*
 void ARandomPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool const Eat) const
 {
-
 	if (Eat)
 	{
 		FutureTile->GetPiece()->SelfDestroy();
 	}
-	
-	/* Promote */
+
 	if (FutureTile->GetGridPosition().X == 0 && Cast<APedestrian>(SelectedPiece))
 	{
-		UE_LOG(LogTemp, Error, TEXT("Promozione"));
-		
-		// Remove reference
+		SelectedPiece->SelfDestroy();
+		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, 1);
 		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
 		SelectedPiece->GetActualTile()->SetPiece(nullptr);
-		
-		// Spawn queen
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, 1);
-
-		SelectedPiece->SelfDestroy();
-		
 	}
 	else
 	{
@@ -105,10 +119,5 @@ void ARandomPlayer::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool c
 		FutureTile->SetPiece(SelectedPiece);
 	}
 	
-	// Remove possible move color
-	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->DefaultTileColor();
-	
 }
-
-
-
+*/

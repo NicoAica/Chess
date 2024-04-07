@@ -72,9 +72,10 @@ public:
 		}
 	}
 
-	void SetErrorMessage() const
+	void SetErrorMessage(const FString& Message) const
 	{
 		ErrorMessageTextBox->SetVisibility(ESlateVisibility::Visible);
+		ErrorMessageTextBox->SetText(FText::FromString(Message));
 	}
 
 	void HiddenErrorMessage() const
