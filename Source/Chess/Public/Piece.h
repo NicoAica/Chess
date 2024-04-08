@@ -33,6 +33,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	ATile* ActualTile = nullptr;
 
+	void CalculatePossibleMoveInDirection(int32 X, int32 Y, const bool CheckScacco = true);
+
 public:
 
 	UPROPERTY()

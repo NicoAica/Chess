@@ -41,10 +41,10 @@ void AChessGameMode::BeginPlay()
 	// Human player = 0
 	Players.Add(HumanPlayer);
 	// Random Player
-	//ARandomPlayer* AI = GetWorld()->SpawnActor<ARandomPlayer>(FVector(), FRotator());
+	ARandomPlayer* AI = GetWorld()->SpawnActor<ARandomPlayer>(FVector(), FRotator());
 
 	// MiniMax Player
-	auto* AI = GetWorld()->SpawnActor<AMinMaxPlayer>(FVector(), FRotator());
+	//auto* AI = GetWorld()->SpawnActor<AMinMaxPlayer>(FVector(), FRotator());
 
 	// AI player = 1
 	Players.Add(AI);

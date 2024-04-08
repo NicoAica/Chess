@@ -24,11 +24,40 @@ APiece::APiece()
 void APiece::BeginPlay()
 {
 	Super::BeginPlay();
-	//AChessGameMode* GameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+}
 
-	// Da fare nella game field
-	// GameMode->GField->OnResetEvent.AddDynamic(this, &APiece::SelfDestroy);
+void APiece::CalculatePossibleMoveInDirection(const int32 X, const int32 Y, const bool CheckScacco)
+{
+	TMap<FVector2D, ATile*> TileMap = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->GetTileMap();
 	
+	ATile* Tmp = ActualTile;
+	
+	while (Tmp != nullptr)
+	{
+		FVector2D NewPosition = Tmp->GetGridPosition();
+		NewPosition.X += X;
+		NewPosition.Y += Y;
+		if (ATile** NewTile = TileMap.Find(NewPosition); NewTile != nullptr && *NewTile != nullptr)
+		{
+			if ((*NewTile)->GetTileStatus() != Occupied)
+			{
+				AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
+				Tmp = (*NewTile);
+			}
+			else
+			{
+				if ((*NewTile)->GetOwner() != ActualTile->GetOwner())
+				{
+					AddPossibleMove(NewPosition, (*NewTile), this, CheckScacco);
+				}
+				Tmp = nullptr;
+			}
+		}
+		else
+		{
+			Tmp = nullptr;
+		}
+	}
 }
 
 void APiece::SetPlayerOwner(IPlayerInterface *Player)

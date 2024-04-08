@@ -34,8 +34,7 @@ void AMinMaxPlayer::OnTurn()
 	auto const GField = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField;
 
 	
-	int32 _MinMax = MinMax(0, -1000, 1000, false);
-	UE_LOG(LogTemp, Warning, TEXT("Best value: %d"), _MinMax);
+	MinMax(0, -1000, 1000, false);
 
 	NextMove->Piece->CalculatePossibleMove();
 	NextMove->Piece->ColorTilePossibleMove();
