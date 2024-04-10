@@ -13,8 +13,6 @@
 #include "Pieces/Rook.h"
 #include "GameField.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReset);
-
 UCLASS()
 class CHESS_API AGameField : public AActor
 {
@@ -68,10 +66,6 @@ public:
 	// Use this method to color the tile spawned to default
 	void DefaultTileColor();
 
-	// Map of the tiles
-	UPROPERTY(Transient)
-	TMap<FVector2D, ATile*> TileMap;
-
 	/* Spawn Pieces */
 	void SpawnPedestrianOnTiles();
 	void SpawnQueensOnTile();
@@ -84,13 +78,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Map of the tiles
+	UPROPERTY(Transient)
+	TMap<FVector2D, ATile*> TileMap;
+	
 	UPROPERTY(Transient)
 	TArray<ATile*> TileArray;
 
 	const int32 Size = 8;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	
 	float TileSize;
+	float TileScale;
 
 	/* BluePrint Classes */
 	UPROPERTY(EditDefaultsOnly)
@@ -152,6 +150,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Material Instance Configuration")
 	UMaterialInstance *MaterialInstanceKingBlack;
 
+	template <typename T>
+	void SpawnPiece(TSubclassOf<T> Class, const int32 X, const int32 Y, const int32 Player, UMaterialInstance* MaterialInstance, bool const IsKingTile = false);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -159,3 +160,5 @@ public:
 	// Use this method to move the actor to the future tile
 	void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat, const int32 Player) const;
 };
+
+

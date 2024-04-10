@@ -27,7 +27,7 @@ protected:
 	UMove* NextMove;
 
 	// Difficulty of AI (MinMax Depth)
-	int32 Difficulty = 3;
+	int32 Difficulty = 2;
 	
 public:	
 

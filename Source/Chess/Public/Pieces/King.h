@@ -17,11 +17,11 @@ public:
 	// Sets default values for this actor's properties
 	AKing();
 
+	virtual int32 CalculatePossibleMove(const bool CheckScacco = true) override;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-	virtual int32 CalculatePossibleMove(const bool CheckScacco = true) override;
 	
 };

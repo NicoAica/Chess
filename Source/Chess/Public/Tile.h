@@ -68,10 +68,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FVector2D TileGridPosition;
-	
-//public:	
-	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
 
     UPROPERTY()
 	APiece* Piece;

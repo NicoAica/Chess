@@ -12,13 +12,6 @@ UCLASS()
 class CHESS_API APiece : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	APiece();
-	
-	UPROPERTY(EditAnywhere, Category="Components")
-	UStaticMeshComponent* StaticMeshComponent;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
@@ -36,6 +29,12 @@ protected:
 	void CalculatePossibleMoveInDirection(int32 X, int32 Y, const bool CheckScacco = true);
 
 public:
+
+	// Sets default values for this actor's properties
+	APiece();
+	
+	UPROPERTY(EditAnywhere, Category="Components")
+	UStaticMeshComponent* StaticMeshComponent;
 
 	UPROPERTY()
 	TMap<FVector2D, ATile*> PossibleMove;

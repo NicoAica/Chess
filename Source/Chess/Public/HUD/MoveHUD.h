@@ -5,9 +5,7 @@
 #include "CoreMinimal.h"
 #include "MoveListEntry.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Button.h"
 #include "Components/ScrollBox.h"
-#include "Components/TextBlock.h"
 #include "MoveHUD.generated.h"
 
 /**
@@ -29,58 +27,16 @@ public:
 	UPROPERTY(EditAnywhere, Category="Move HUD Settings")
 	TSubclassOf<UMoveListEntry> MoveListEntryClass;
 
-	void AddInList(const FString& Move, bool const ButtonVisibility = false, const int32 MoveIndex = 0) const
-	{
-		if (MoveListEntryClass)
-		{
-			UMoveListEntry* MoveListEntry = CreateWidget<UMoveListEntry>(GetWorld(), MoveListEntryClass);
-			MoveListEntry->MoveTextBlock->SetText(FText::FromString(Move));
-			if (!ButtonVisibility)
-			{
-				MoveListEntry->ResetButton->SetVisibility(ESlateVisibility::Hidden);
-			}
-			MoveListEntry->MoveIndex = MoveIndex;
-			MoveList->AddChild(MoveListEntry);
-		}
-	}
+	void AddInList(const FString& Move, bool const ButtonVisibility = false, const int32 MoveIndex = 0) const;
 
-	void AddCheckInLastMove() const
-	{
-		if (MoveList->GetChildrenCount() > 0)
-		{
-			const UMoveListEntry* MoveListEntry = Cast<UMoveListEntry>(MoveList->GetChildAt(MoveList->GetChildrenCount() - 1));
-			const FString Tmp = MoveListEntry->MoveTextBlock->GetText().ToString();
-			MoveListEntry->MoveTextBlock->SetText(FText::FromString(Tmp + "+"));
-		}
-	}
+	void AddCheckInLastMove() const;
 
-	void AddCheckMateInLastMove() const
-	{
-		if (MoveList->GetChildrenCount() > 0)
-		{
-			const UMoveListEntry* MoveListEntry = Cast<UMoveListEntry>(MoveList->GetChildAt(MoveList->GetChildrenCount() - 1));
-			const FString Tmp = MoveListEntry->MoveTextBlock->GetText().ToString();
-			MoveListEntry->MoveTextBlock->SetText(FText::FromString(Tmp + "#"));
-		}
-	}
+	void AddCheckMateInLastMove() const;
 
-	void PopLastMove() const
-	{
-		if (MoveList->GetChildrenCount() > 0)
-		{
-			MoveList->RemoveChildAt(MoveList->GetChildrenCount() - 1);
-		}
-	}
+	void PopLastMove() const;
 
-	void SetErrorMessage(const FString& Message) const
-	{
-		ErrorMessageTextBox->SetVisibility(ESlateVisibility::Visible);
-		ErrorMessageTextBox->SetText(FText::FromString(Message));
-	}
+	void SetErrorMessage(const FString& Message) const;
 
-	void HiddenErrorMessage() const
-	{
-		ErrorMessageTextBox->SetVisibility(ESlateVisibility::Hidden);
-	}
+	void HiddenErrorMessage() const;
 	
 };
