@@ -48,5 +48,10 @@ public:
 	void TurnNextPlayer(UMove* Move);
 
 	// called when the game begins
-	void ChoosePlayerAndStartGame();
+	void StartGame();
+
+	// Called from Hud to choose player
+	UFUNCTION(BlueprintCallable)
+	void ChooseAiPlayerAndStartGame(bool IsMinMaxPlayer);
+	
 };

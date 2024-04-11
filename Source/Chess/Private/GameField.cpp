@@ -78,11 +78,11 @@ void AGameField::GenerateField()
 	}
 
 	SpawnPedestrianOnTiles();
-	SpawnQueensOnTile();
-	SpawnKnightsOnTile();
-	SpawnRooksOnTile();
-	SpawnBishopsOnTile();
-	SpawnKingsOnTile();
+	//SpawnQueensOnTile();
+	//SpawnKnightsOnTile();
+	//SpawnRooksOnTile();
+	//SpawnBishopsOnTile();
+	//SpawnKingsOnTile();
 
 	DefaultTileColor();
 }
@@ -110,10 +110,10 @@ void AGameField::SpawnPedestrianOnTiles()
 	for (int i = 0; i < Size; i++)
 	{
 		// White Pedestrian
-		SpawnPiece(PedestrianClass, 1, i, 0, MaterialInstancePedestrianWhite); 
+		SpawnPiece(PedestrianClass, 6, i, 0, MaterialInstancePedestrianWhite); 
 
 		// Black Pedestrian
-		SpawnPiece(PedestrianClass, 6, i, 1, MaterialInstancePedestrianBlack);
+		SpawnPiece(PedestrianClass, 4, i, 1, MaterialInstancePedestrianBlack);
 	}
 }
 
@@ -267,28 +267,7 @@ bool AGameField::IsStaleMate(const int32 Player)
 }
 
 
-void AGameField::Promote(ATile* FuturePosition, int32 const Player)
-{
-	FVector Location = GetRelativeLocationByXYPosition(FuturePosition->GetGridPosition().X,FuturePosition->GetGridPosition().Y);
-	Location.Z = 4.5;
 
-	AQueen* Queen = GetWorld()->SpawnActor<AQueen>(QueenClass, Location,
-	                                               FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
-	Queen->SetActualTile(FuturePosition);
-	if (Player)
-	{
-		Queen->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenBlack);
-	}
-	else
-	{
-		Queen->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenWhite);
-	}
-
-	Queen->SetActorScale3D(FVector(TileScale, TileScale, 1));
-	FuturePosition->SetTileStatus(Player, Occupied, false);
-	FuturePosition->SetPiece(Queen);
-	Queen->CalculatePossibleMove();
-}
 
 int32 AGameField::ValueOfChessBoard()
 {
@@ -362,13 +341,87 @@ void AGameField::BeginPlay()
 	GenerateField();
 }
 
+void AGameField::Promote(ATile* FuturePosition, int32 const Player)
+{
+	FVector Location = GetRelativeLocationByXYPosition(FuturePosition->GetGridPosition().X,FuturePosition->GetGridPosition().Y);
+	Location.Z = 4.5;
+
+	APiece* NewPiece = GetWorld()->SpawnActor<APiece>(QueenClass, Location,
+												   FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	NewPiece->SetActualTile(FuturePosition);
+	if (Player)
+	{
+		NewPiece->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenBlack);
+	}
+	else
+	{
+		NewPiece->StaticMeshComponent->SetMaterial(0, MaterialInstanceQueenWhite);
+	}
+
+	NewPiece->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	FuturePosition->SetTileStatus(Player, Occupied, false);
+	FuturePosition->SetPiece(NewPiece);
+	NewPiece->CalculatePossibleMove();
+}
+
+void AGameField::PromotePiece(const int32 Piece)
+{
+
+	TmpSelectedPiece->SelfDestroy();
+
+	FVector Location = GetRelativeLocationByXYPosition(TmpFutureTile->GetGridPosition().X,TmpFutureTile->GetGridPosition().Y);
+	Location.Z = 4.5;
+	
+	UMaterialInstance* MaterialInstance = nullptr;
+	TSubclassOf<APiece> PieceClass = nullptr;
+	
+	switch (Piece)
+	{
+	case 0:
+		PieceClass = BishopClass;
+		MaterialInstance = TmpPlayer == 0 ? MaterialInstanceBishopWhite : MaterialInstanceBishopBlack;
+		break;
+	case 1:
+		PieceClass = KnightClass;
+		MaterialInstance = TmpPlayer == 0 ? MaterialInstanceKnightWhite : MaterialInstanceKnightBlack;
+		break;
+	case 2:
+		PieceClass = RookClass;
+		MaterialInstance = TmpPlayer == 0 ? MaterialInstanceRookWhite : MaterialInstanceRookBlack;
+		break;
+	case 3:
+		PieceClass = QueenClass;
+		MaterialInstance = TmpPlayer == 0 ? MaterialInstanceQueenWhite : MaterialInstanceQueenBlack;
+		break;
+	default:
+		UE_LOG(LogTemp, Error, TEXT("Invalid Piece"));
+	}
+
+	APiece* NewPiece = GetWorld()->SpawnActor<APiece>(PieceClass, Location,FRotationMatrix::MakeFromX(FVector(0, 1, 0)).Rotator());
+	NewPiece->StaticMeshComponent->SetMaterial(0, MaterialInstance);
+	
+								
+	NewPiece->SetActualTile(TmpFutureTile);
+	
+	NewPiece->SetActorScale3D(FVector(TileScale, TileScale, 1));
+	TmpFutureTile->SetTileStatus(TmpPlayer, Occupied, false);
+	TmpFutureTile->SetPiece(NewPiece);
+	NewPiece->CalculatePossibleMove();
+	
+	TmpSelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
+	TmpSelectedPiece->GetActualTile()->SetPiece(nullptr);
+
+	TmpMove->SetPromotedPiece(TmpFutureTile->GetPiece());
+	Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->TurnNextPlayer(TmpMove);
+}
+
 // Called every frame
 void AGameField::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void AGameField::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool const Eat, const int32 Player) const
+bool AGameField::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool const Eat, const int32 Player, UMove* Move)
 {
 	if (Eat)
 	{
@@ -377,13 +430,28 @@ void AGameField::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool cons
 
 	if (FutureTile->GetGridPosition().X == (Player == 1 ? 0 : 7) && Cast<APedestrian>(SelectedPiece))
 	{
+		if (Player == 0)
+		{
+
+			TmpSelectedPiece = SelectedPiece;
+			TmpFutureTile = FutureTile;
+			TmpPlayer = Player;
+			TmpMove = Move;
+			
+			UUserWidget* ChoosePromotionPieceHUD = CreateWidget<UUserWidget>(GetWorld(), ChoosePromotionPieceClass);
+			ChoosePromotionPieceHUD->AddToViewport();
+			
+			return true;
+		}
+		
 		SelectedPiece->SelfDestroy();
-		Cast<AChessGameMode>(GetWorld()->GetAuthGameMode())->GField->Promote(FutureTile, Player);
+		Promote(FutureTile, Player);
 		SelectedPiece->GetActualTile()->SetTileStatus(-1, Empty);
 		SelectedPiece->GetActualTile()->SetPiece(nullptr);
+		return false;
+		
 	}
-	else
-	{
+	
 		// Calc future location
 		const FVector2D FutureTilePosition = FutureTile->GetGridPosition();
 		FVector const FuturePosition = FVector(FutureTilePosition.X * 120, FutureTilePosition.Y * 120, SelectedPiece->GetActorLocation().Z);
@@ -397,6 +465,7 @@ void AGameField::MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool cons
 		SelectedPiece->GetActualTile()->SetPiece(nullptr);
 		SelectedPiece->SetActualTile(FutureTile);
 		FutureTile->SetPiece(SelectedPiece);
-	}
 	
+
+	return false;
 }

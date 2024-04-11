@@ -11,6 +11,7 @@
 #include "Pieces/Knight.h"
 #include "Pieces/Queen.h"
 #include "Pieces/Rook.h"
+#include "Supports/Move.h"
 #include "GameField.generated.h"
 
 UCLASS()
@@ -90,6 +91,23 @@ protected:
 	float TileSize;
 	float TileScale;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> ChoosePromotionPieceClass;
+
+	/* Temp Variables for Promotion */
+	UPROPERTY()
+	APiece* TmpSelectedPiece;
+	UPROPERTY()
+	ATile* TmpFutureTile;
+	UPROPERTY()
+	int32 TmpPlayer;
+	UPROPERTY()
+	UMove* TmpMove;
+
+	// This func is called from hud to promote the piece
+	UFUNCTION(BlueprintCallable)
+	void PromotePiece(const int32 Piece);
+
 	/* BluePrint Classes */
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATile> TileClass;
@@ -157,8 +175,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Use this method to move the actor to the future tile
-	void MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat, const int32 Player) const;
+	// Use this method to move the actor to the future tile (return true if it is a promotion)
+	bool MoveActorTo(ATile* FutureTile, APiece* SelectedPiece, bool Eat, const int32 Player, UMove* Move = nullptr);
 };
 
 

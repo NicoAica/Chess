@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "HUD/MoveHUD.h"
 #include "HUD/MoveListEntry.h"
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
-#include "HUD/MoveHUD.h"
+
 
 void UMoveHUD::AddInList(const FString& Move, bool const ButtonVisibility, const int32 MoveIndex) const
 {

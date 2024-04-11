@@ -7,6 +7,7 @@
 #include "EngineUtils.h"
 #include "Players/HumanPlayer.h"
 #include "Players/MinMaxPlayer.h"
+#include "Players/RandomPlayer.h"
 
 AChessGameMode::AChessGameMode(): IsGameOver(false), CurrentPlayer(0), GField(nullptr)
 {
@@ -27,20 +28,8 @@ void AChessGameMode::BeginPlay()
 	
 	const FVector CameraPos(420, 420, 1000.0f); // 420 = ((120 * (8 + ((8 - 1)) - (8 - 1))) / 2) - (120 / 2)
 	HumanPlayer->SetActorLocationAndRotation(CameraPos, FRotationMatrix::MakeFromX(FVector(0, 0, -1)).Rotator());
-	
-	// Human player = 0
+
 	Players.Add(HumanPlayer);
-	
-	// Random Player
-	//ARandomPlayer* AI = GetWorld()->SpawnActor<ARandomPlayer>(FVector(), FRotator());
-
-	// MiniMax Player
-	auto* AI = GetWorld()->SpawnActor<AMinMaxPlayer>(FVector(), FRotator());
-
-	// AI player = 1
-	Players.Add(AI);
-
-	this->ChoosePlayerAndStartGame();
 }
 
 int32 AChessGameMode::GetNextPlayer(int32 Player) const
@@ -90,7 +79,7 @@ void AChessGameMode::TurnNextPlayer(UMove* Move)
 	Players[CurrentPlayer]->OnTurn();
 }
 
-void AChessGameMode::ChoosePlayerAndStartGame()
+void AChessGameMode::StartGame()
 {
 	CurrentPlayer = 0;
 
@@ -114,4 +103,19 @@ void AChessGameMode::ChoosePlayerAndStartGame()
 	}
 	
 	Players[CurrentPlayer]->OnTurn();
+}
+
+void AChessGameMode::ChooseAiPlayerAndStartGame(bool IsMinMaxPlayer)
+{
+	if (IsMinMaxPlayer)
+	{
+		auto* AI = GetWorld()->SpawnActor<AMinMaxPlayer>(FVector(), FRotator());
+		Players.Add(AI);
+	}
+	else
+	{
+		auto* AI = GetWorld()->SpawnActor<ARandomPlayer>(FVector(), FRotator());
+		Players.Add(AI);
+	}
+	StartGame();
 }
