@@ -3,7 +3,7 @@
 
 #include "Supports/Move.h"
 
-#include "Piece.h"
+#include "Pieces/Piece.h"
 
 UMove::UMove()
 {

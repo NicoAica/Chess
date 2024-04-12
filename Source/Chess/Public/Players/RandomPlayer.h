@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "PlayerInterface.h"
-#include "Tile.h"
 #include "GameFramework/Pawn.h"
 #include "RandomPlayer.generated.h"
 

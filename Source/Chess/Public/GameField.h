@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Pieces/Pedestrian.h"
-#include "Tile.h"
+#include "Tile/Tile.h"
 #include "GameFramework/Actor.h" 
 #include "Pieces/Bishop.h"
 #include "Pieces/King.h"

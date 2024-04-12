@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Tile.h"
-#include "Chess/Public/Tile.h"
+#include "Tile/Tile.h"
 
 // Sets default values
 ATile::ATile()
@@ -15,9 +14,7 @@ ATile::ATile()
 
 	SetRootComponent(Scene);
 	StaticMeshComponent->SetupAttachment(Scene);
-
-
-	// TODO: Non è detto che sia vuota
+	
 	Status = Empty;
 	PlayerOwner =- 1;
 	TileGridPosition = FVector2D(0, 0);

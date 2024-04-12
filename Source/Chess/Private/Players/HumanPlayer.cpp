@@ -4,7 +4,7 @@
 #include "Players/HumanPlayer.h"
 
 #include "ChessGameMode.h"
-#include "Tile.h"
+#include "Tile/Tile.h"
 
 // Sets default values
 AHumanPlayer::AHumanPlayer()

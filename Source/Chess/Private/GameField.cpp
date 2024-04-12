@@ -6,7 +6,7 @@
 #include "ChessGameInstance.h"
 #include "ChessGameMode.h"
 #include "Pieces/Pedestrian.h"
-#include "Piece.h"
+#include "Pieces/Piece.h"
 #include "Pieces/Rook.h"
 
 // Sets default values
@@ -78,11 +78,11 @@ void AGameField::GenerateField()
 	}
 
 	SpawnPedestrianOnTiles();
-	//SpawnQueensOnTile();
-	//SpawnKnightsOnTile();
-	//SpawnRooksOnTile();
-	//SpawnBishopsOnTile();
-	//SpawnKingsOnTile();
+	SpawnQueensOnTile();
+	SpawnKnightsOnTile();
+	SpawnRooksOnTile();
+	SpawnBishopsOnTile();
+	SpawnKingsOnTile();
 
 	DefaultTileColor();
 }
@@ -110,10 +110,10 @@ void AGameField::SpawnPedestrianOnTiles()
 	for (int i = 0; i < Size; i++)
 	{
 		// White Pedestrian
-		SpawnPiece(PedestrianClass, 6, i, 0, MaterialInstancePedestrianWhite); 
+		SpawnPiece(PedestrianClass, 1, i, 0, MaterialInstancePedestrianWhite); 
 
 		// Black Pedestrian
-		SpawnPiece(PedestrianClass, 4, i, 1, MaterialInstancePedestrianBlack);
+		SpawnPiece(PedestrianClass, 6, i, 1, MaterialInstancePedestrianBlack);
 	}
 }
 

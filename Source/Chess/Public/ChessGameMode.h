@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameField.h"
-#include "PlayerInterface.h"
+#include "Players/PlayerInterface.h"
 #include "GameFramework/GameModeBase.h"
 #include "Supports/Move.h"
 #include "ChessGameMode.generated.h"

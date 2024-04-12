@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Piece.h"
+#include "Pieces/Piece.h"
 #include "Engine/GameInstance.h"
 #include "HUD/MoveHUD.h"
 #include "Supports/Move.h"

@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlayerInterface.h"
-#include "Tile.h"
+#include "Players/PlayerInterface.h"
+#include "Tile/Tile.h"
 #include "GameFramework/Actor.h"
 #include "Piece.generated.h"
 

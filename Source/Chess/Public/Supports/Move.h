@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Tile.h"
+#include "Tile/Tile.h"
 #include "Move.generated.h"
 
 /**

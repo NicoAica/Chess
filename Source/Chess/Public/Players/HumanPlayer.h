@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameField.h"
 #include "PlayerInterface.h"
-#include "Piece.h"
+#include "Pieces/Piece.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Pawn.h"
 #include "HumanPlayer.generated.h"
