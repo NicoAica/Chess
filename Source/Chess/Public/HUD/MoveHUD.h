@@ -27,16 +27,22 @@ public:
 	UPROPERTY(EditAnywhere, Category="Move HUD Settings")
 	TSubclassOf<UMoveListEntry> MoveListEntryClass;
 
+	// Add MoveListEntry to the MoveList
 	void AddInList(const FString& Move, bool const ButtonVisibility = false, const int32 MoveIndex = 0) const;
 
+	// Add + to the last MoveListEntry
 	void AddCheckInLastMove() const;
 
+	// Add # to the last MoveListEntry
 	void AddCheckMateInLastMove() const;
 
+	// Pop last move in stack
 	void PopLastMove() const;
 
+	// Set the error message
 	void SetErrorMessage(const FString& Message) const;
 
+	// Hide the error message
 	void HiddenErrorMessage() const;
 	
 };

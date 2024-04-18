@@ -18,12 +18,16 @@ class CHESS_API UMove : public UObject
 public:
 	UMove();
 
+	// Constructor
 	UMove(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat, APiece* InEatenPiece = nullptr, APiece* InPromotedPiece = nullptr);
 
+	// Initialize the move
 	void Initialize(ATile* InOrigin, ATile* InDestination, APiece* InPiece, bool InEat, APiece* InEatenPiece = nullptr, APiece* InPromotedPiece = nullptr);
 
+	// Set the piece promoted
 	void SetPromotedPiece(APiece* InPromotedPiece);
 
+	// Set the piece from promoted piece
 	void SetPieceFromPromotedPiece();
 
 	UPROPERTY(Transient)
@@ -37,11 +41,9 @@ public:
 	
 	UPROPERTY(Transient)
 	APiece* EatenPiece;
-
-	// Queen Piece in promoted case
+	
 	UPROPERTY(Transient)
 	APiece* PromotedPiece;
-	
 	
 	bool Eat;
 };

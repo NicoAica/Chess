@@ -24,7 +24,8 @@ class CHESS_API IPlayerInterface
 public:
 
 	int PlayerNumber;
-	
+
+	// Called to set the player turn
 	virtual void OnTurn() {};
 	
 };
