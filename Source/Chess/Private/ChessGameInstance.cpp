@@ -42,20 +42,19 @@ void UChessGameInstance::AddStaleMate() const
 
 void UChessGameInstance::AddMove(UMove* Move)
 {
-	Moves.Add(Move);
+	Moves.Add(Move);	
 	
 	MoveHUD->AddInList(
 		FString::FromInt(MoveCounter) +
-		". " + GetNameOfPiece(Move->Piece) +
+		". " + ((Move->PromotedPiece == nullptr)? GetNameOfPiece(Move->Piece): GetNameOfPiece(Move->PromotedPiece)) +
 		FixIfOtherPieceCanGoToTile(Move->Origin, Move->Destination, Move->Piece) +
 		(Move->Eat ? "x" : "") +
 		GetYInChar(Move->Destination->GetGridPosition().Y) +
-		FString::FromInt(Move->Destination->GetGridPosition().X + 1),
+		FString::FromInt(Move->Destination->GetGridPosition().X + 1) +
+		(Move->PromotedPiece ? " = " + GetNameOfPiece(Move->Piece) : ""),
 		Move->Destination->GetOwner() == 0,
 		MoveCounter
 		);
-
-	//UE_LOG(LogTemp, Error, TEXT("Piece moved from Position: %s, piece eaten: %s"), *Move->Origin->GetActorLocation().ToString(), Move->EatenPiece ? *Move->EatenPiece->GetName() : TEXT("None"));
 	
 	MoveCounter++;
 }
